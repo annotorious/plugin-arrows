@@ -1,8 +1,10 @@
 import { render } from 'solid-js/web';
-import { ArrowsLayer } from './arrows-layer';
+import { ArrowsLayer, ArrowsLayerAPI } from './arrows-layer/arrows-layer';
 import type { ImageAnnotation, ImageAnnotator } from '@annotorious/annotorious';
 
 export interface ArrowsPluginInstance {
+
+  setEnabled(enabled: boolean): void;
 
   unmount(): void;
 
@@ -10,29 +12,22 @@ export interface ArrowsPluginInstance {
 
 export const mountPlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsPluginInstance => {
 
-  console.log('rendering arrow layer into', anno.element);
-  
-  const dispose = render(() => <ArrowsLayer />, anno.element);
+  let componentAPI: ArrowsLayerAPI |  null = null;
 
-  /*
-  const connectorLayer = new WiresLayer({
-    target: anno.element,
-    props: {
-      opts,
-      enabled: isEnabled,
-      graph,
-      state: anno.state as ImageAnnotatorState<ImageAnnotation | ConnectionAnnotation>
-    }
-  });
-  */
+  const dispose = render(() => <ArrowsLayer onInit={api => componentAPI = api} />, anno.element);
 
   /** API **/
+
+  const setEnabled = (enabled: boolean) => {
+    componentAPI?.setEnabled(enabled);
+  }
   
   const unmount = () => {
     dispose();
   }
 
   return { 
+    setEnabled,
     unmount
   }
 

@@ -7,6 +7,9 @@
 
   <body>
     <div id="content">
+      <div>
+        <button id="enable">Disabled</button>
+      </div>
       <img id="sample-image" src="640px-Hallstatt.jpg" />
     </div>
     
@@ -20,6 +23,17 @@
         const anno = createImageAnnotator('sample-image');
 
         const arrowsPlugin = mountPlugin(anno);
+
+        const enableBtn = document.getElementById('enable');
+        enableBtn.addEventListener('click', () => {
+          if (enableBtn.innerText === 'Disabled') {
+            enableBtn.innerText = 'Enabled';
+            arrowsPlugin.setEnabled(true);
+          } else {
+            enableBtn.innerText = 'Disabled';
+            arrowsPlugin.setEnabled(false);
+          }
+        });
       }
     </script>
   </body>
