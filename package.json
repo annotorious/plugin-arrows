@@ -1,0 +1,19 @@
+{
+  "name": "@annotorious/plugin-arrows-monorepo",
+  "version": "0.0.1",
+  "description": "Connecting annotations with arrows",
+  "author": "Rainer Simon",
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/annotorious/plugin-arrows.git"
+  },
+  "license": "BSD-3-Clause",
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces"
+  },
+  "workspaces": [
+    "./packages/arrows",
+    "./packages/arrows-react"
+  ]
+}

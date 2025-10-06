@@ -1,0 +1,38 @@
+{
+  "name": "@annotorious/plugin-arrows",
+  "version": "0.0.1",
+  "description": "Connecting annotations with arrows",
+  "author": "Rainer Simon",
+  "license": "BSD-3-Clause",
+  "homepage": "https://annotorious.dev",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/annotorious/plugin-arrows.git"
+  },
+  "bugs": {
+    "url": "https://github.com/annotorious/plugin-arrows/issues"
+  },
+  "scripts": {
+    "start": "vite",
+    "build": "vite build"
+  },
+  "main": "./dist/annotorious-arrows.js",
+  "module": "./dist/annotorious-arrows.es.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vite": "^6.3.6",
+    "vite-plugin-dts": "^4.5.4",
+    "vite-plugin-solid": "^2.11.9"
+  },
+  "peerDependencies": {
+    "@annotorious/annotorious": "^3.7.8"
+  },
+  "dependencies": {
+    "solid-js": "^1.9.9"
+  }
+}

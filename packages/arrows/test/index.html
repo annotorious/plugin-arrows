@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Annotorious | Arrows Plugin</title>
+  </head>
+
+  <body>
+    <div id="content">
+      <img id="sample-image" src="640px-Hallstatt.jpg" />
+    </div>
+    
+    <script type="module">
+      import { createImageAnnotator } from '@annotorious/annotorious';
+      import { mountPlugin } from '../src';
+
+      import '@annotorious/annotorious/annotorious.css';
+
+      window.onload = function() {    
+        const anno = createImageAnnotator('sample-image');
+
+        const arrowsPlugin = mountPlugin(anno);
+      }
+    </script>
+  </body>
+</html>
