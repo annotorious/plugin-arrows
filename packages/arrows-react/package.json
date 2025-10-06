@@ -1,0 +1,57 @@
+{
+  "name": "@annotorious/plugin-arrows-react",
+  "version": "0.0.1",
+  "description": "React bindings for the Annotorious arrows plugin.",
+  "author": "Rainer Simon",
+  "license": "BSD-3-Clause",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/annotorious/plugin-arrows.git"
+  },
+  "bugs": {
+    "url": "https://github.com/annotorious/plugin-arrows/issues"
+  },
+  "scripts": {
+    "start": "vite",
+    "build": "vite build"
+  },
+  "module": "dist/annotorious-arrows-react.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/annotorious-arrows-react.es.js"
+    },
+    "./annotorious-wires-react.css": "./dist/annotorious-arrows-react.css"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "typescript": "5.9.3",
+    "vite": "^6.3.6",
+    "vite-plugin-dts": "^4.5.4",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "peerDependencies": {
+    "@annotorious/react": "^3.7.8",
+    "openseadragon": "^3.0.0 || ^4.0.0 || ^5.0.0",
+    "react": ">=18.x || >=19.x",
+    "react-dom": ">=18.x || >=19.x"
+  },
+  "peerDependenciesMeta": {
+    "openseadragon": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@annotorious/plugin-arrows": "0.0.1"
+  },
+  "sideEffects": false
+}
