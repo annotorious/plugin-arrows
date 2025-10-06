@@ -14,7 +14,7 @@ export const ArrowsPlugin = (props: ArrowsPluginProps) => {
 
   const mountPlugin = useCallback((anno: AnnotoriousImageAnnotator) => {
     const { enabled: _, ...opts } = props;
-    _mountPlugin(anno);
+    return _mountPlugin(anno);
   }, []);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const ArrowsPlugin = (props: ArrowsPluginProps) => {
   }, [instance, props.enabled]);
   
   return (
-   <AnnotoriousPlugin 
+    <AnnotoriousPlugin
       plugin={mountPlugin} 
       onLoad={instance => setInstance(instance as ArrowsPluginInstance)} /> 
   )

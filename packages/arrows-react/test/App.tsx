@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Annotation, Annotator, ImageAnnotator, useAnnotator } from '@annotorious/react';
+import { ImageAnnotator } from '@annotorious/react';
 import { ArrowsPlugin } from '../src';
 
 export const App = () => {
@@ -8,15 +8,9 @@ export const App = () => {
 
   const [enabled, setEnabled] = useState(false);
 
-  const anno = useAnnotator<Annotator<Annotation, Annotation>>();
-
   useEffect(() => {
-    if (mode === 'ARROWS') setEnabled(true);
+    setEnabled(mode === 'ARROWS');
   }, [mode]);
-
-  useEffect(() => {
-    
-  }, [anno]);
 
   return (
     <div id="content">
