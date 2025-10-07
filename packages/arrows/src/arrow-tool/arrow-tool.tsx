@@ -8,6 +8,8 @@ interface ArrowToolProps {
 
   transform(pt: Point): Point;
 
+  viewportScale?: number;
+
   onCreateArrow(arrow: Arrow): void;
 
 }
@@ -56,7 +58,10 @@ export const ArrowTool = (props: ArrowToolProps) => {
   return (
     <g class="a9s-arrow a9s-arrow-tool">
       {start() && cursor() && (
-        <SvgArrow start={start()} end={cursor()} />
+        <SvgArrow 
+          start={start()} 
+          end={cursor()} 
+          viewportScale={props.viewportScale} />
       )}
     </g>
   )

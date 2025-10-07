@@ -40,10 +40,14 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
         <ArrowTool 
           addEventListener={props.addEventListener(svgRef)}
           transform={props.elementToImage(svgRef)} 
+          viewportScale={props.scale}
           onCreateArrow={arrow => setArrows(current => [...current, arrow])} />
 
         {arrows().map(arrow => (
-          <SvgArrow start={arrow.start} end={arrow.end} />
+          <SvgArrow 
+            start={arrow.start} 
+            end={arrow.end} 
+            viewportScale={props.scale} />
         ))}
       </g>
     </svg>
