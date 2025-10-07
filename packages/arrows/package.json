@@ -41,6 +41,7 @@
     "@annotorious/annotorious": "^3.7.8"
   },
   "dependencies": {
+    "perfect-arrows": "^0.3.7",
     "solid-js": "^1.9.9"
   }
 }

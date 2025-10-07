@@ -1,6 +1,7 @@
 import { createSignal } from 'solid-js';
 import { ArrowTool } from '@/arrow-tool';
 import { Arrow, Point } from '@/types';
+import { SvgArrow } from './svg-arrow';
 
 import styles from './arrows-layer.module.css';
 
@@ -56,15 +57,8 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
         transform={transform} 
         onCreateArrow={arrow => setArrows(current => [...current, arrow])} />
 
-      {arrows().map(({ start, end }) => (
-        <line 
-          x1={start.x}
-          y1={start.y}
-          x2={end.x}
-          y2={end.y}
-          stroke="green"
-          stroke-width="2"
-        />
+      {arrows().map(arrow => (
+        <SvgArrow arrow={arrow}/>
       ))}
     </svg>
   )
