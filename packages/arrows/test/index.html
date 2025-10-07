@@ -15,14 +15,14 @@
     
     <script type="module">
       import { createImageAnnotator } from '@annotorious/annotorious';
-      import { mountPlugin } from '../src';
+      import { mountImagePlugin } from '../src';
 
       import '@annotorious/annotorious/annotorious.css';
 
       window.onload = function() {    
         const anno = createImageAnnotator('sample-image');
 
-        const arrowsPlugin = mountPlugin(anno);
+        const arrowsPlugin = mountImagePlugin(anno);
 
         const enableBtn = document.getElementById('enable');
         enableBtn.addEventListener('click', () => {

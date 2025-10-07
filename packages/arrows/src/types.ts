@@ -1,3 +1,11 @@
+export interface ArrowsPluginInstance {
+
+  setEnabled(enabled: boolean): void;
+
+  unmount(): void;
+
+}
+
 export interface Point {
 
   x: number;
