@@ -23,7 +23,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
     lib: {
-      entry: './src/index.tsx',
+      entry: './src/index.ts',
       name: 'AnnotoriousArrows',
       formats: ['es', 'umd'],
       fileName: (format) => 

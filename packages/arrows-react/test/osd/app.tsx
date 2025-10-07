@@ -6,8 +6,10 @@ import {
   OpenSeadragonViewer, 
   useAnnotator,
 } from '@annotorious/react';
+import { OSDArrowsPlugin } from '../../src';
 
 import '@annotorious/openseadragon/annotorious-openseadragon.css';
+import '@annotorious/plugin-arrows/annotorious-arrows.css';
 
 const IIIF_SAMPLE = {
   "@context" : "http://iiif.io/api/image/2/context.json",
@@ -58,7 +60,7 @@ export const App = () => {
 
   const anno = useAnnotator<AnnotoriousOpenSeadragonAnnotator>();
 
-  const [arrows, setArrowsEnabled] = useState(false);
+  const [arrowsEnabled, setArrowsEnabled] = useState(false);
 
   const toggleMode = () => setMode(mode => 
     mode === 'MOVE' ? 'ANNOTATE' :
@@ -85,6 +87,9 @@ export const App = () => {
         <OpenSeadragonViewer 
           className="openseadragon" 
           options={OSD_OPTIONS} />
+
+        <OSDArrowsPlugin 
+          enabled={arrowsEnabled} />
       </OpenSeadragonAnnotator>
     </div>
   )

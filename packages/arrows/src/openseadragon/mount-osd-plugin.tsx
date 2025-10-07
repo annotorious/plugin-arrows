@@ -15,6 +15,9 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
   /** API **/
 
   const setEnabled = (enabled: boolean) => {
+    if (enabled && anno.getSelected().length > 0)
+      anno.cancelSelected();
+
     componentAPI?.setEnabled(enabled);
   }
   

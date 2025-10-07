@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AnnotoriousImageAnnotator, AnnotoriousPlugin } from '@annotorious/react';
-import { ArrowsPluginInstance, mountPlugin as _mountPlugin } from '@annotorious/plugin-arrows';
+import { ArrowsPluginInstance, mountImagePlugin as _mountPlugin } from '@annotorious/plugin-arrows';
 
 interface ArrowsPluginProps {
 
