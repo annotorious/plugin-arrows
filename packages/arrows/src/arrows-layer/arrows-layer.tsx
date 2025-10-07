@@ -58,7 +58,7 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
         onCreateArrow={arrow => setArrows(current => [...current, arrow])} />
 
       {arrows().map(arrow => (
-        <SvgArrow arrow={arrow}/>
+        <SvgArrow start={arrow.start} end={arrow.end} />
       ))}
     </svg>
   )

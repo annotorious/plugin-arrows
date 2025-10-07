@@ -11,6 +11,10 @@
   pointer-events: all;
 }
 
+.container :global(.a9s-arrow.floating) {
+  pointer-events: none;
+}
+
 .container :global(.a9s-arrow .a9s-arrow-base) {
   fill: #fff;
   stroke: #000;

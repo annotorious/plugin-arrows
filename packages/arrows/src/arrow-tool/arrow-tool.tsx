@@ -1,5 +1,6 @@
-import { createSignal, onCleanup, onMount } from 'solid-js';
+import { createMemo, createSignal, onCleanup, onMount } from 'solid-js';
 import { Arrow, Point } from '@/types';
+import { SvgArrow } from '@/arrows-layer/svg-arrow';
 
 interface ArrowToolProps {
 
@@ -55,14 +56,7 @@ export const ArrowTool = (props: ArrowToolProps) => {
   return (
     <g class="a9s-arrow a9s-arrow-tool">
       {start() && cursor() && (
-        <line
-          x1={start()!.x}
-          y1={start()!.y}
-          x2={cursor()!.x}
-          y2={cursor()!.y}
-          stroke="blue"
-          stroke-width="2"
-          stroke-dasharray="4" />
+        <SvgArrow start={start()} end={cursor()} />
       )}
     </g>
   )
