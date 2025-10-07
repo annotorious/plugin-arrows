@@ -38,7 +38,7 @@
 
       import '@annotorious/openseadragon/annotorious-openseadragon.css';
 
-      window.onload = function() {
+      window.onload = () => {
         var viewer = OpenSeadragon({
           id: 'openseadragon',
           prefixUrl: 'https://cdn.jsdelivr.net/npm/openseadragon@3.1/build/openseadragon/images/', 
@@ -76,21 +76,7 @@
           }
         });
 
-        var anno = createOSDAnnotator(viewer, {
-          style: {
-            fill: '#00cc00',
-            fillOpacity: 0.25,
-            stroke: '#00cc00',
-            strokeOpacity: 1,
-            strokeWidth: 2
-          }
-        });
-
-        anno.on('createAnnotation', a => console.log('created', a));
-        anno.on('deleteAnnotation', a => console.log('deleted', a));
-        anno.on('selectionChanged', selected => console.log('selection', selected));
-        anno.on('updateAnnotation', (a, previous) => console.log('updated', previous, 'with', a));
-        
+        const anno = createOSDAnnotator(viewer); 
         const arrows = mountOSDPlugin(anno, viewer);
 
         var button = document.getElementById('mode');
@@ -99,22 +85,16 @@
           if (mode === 'MOVE') {
             mode = 'ANNOTATE';
             button.innerHTML = 'Mode: Annotate';
-
-            // Enable drawing
             anno.setDrawingEnabled(true);
           } else if (mode === 'ANNOTATE') {
             mode = 'RELATIONS';
             button.innerHTML = 'Mode: Relations';
-
-            // Disable drawing and enable connectors
             anno.setDrawingEnabled(false);
-            connectors.setEnabled(true);
+            arrows.setEnabled(true);
           } else {
             mode = 'MOVE';
             button.innerHTML = 'Mode: Move';
-
-            // Disable connectors
-            connectors.setEnabled(false);
+            arrows.setEnabled(false);
           }
         });
       }

@@ -10,6 +10,10 @@ export interface ArrowsLayerProps {
 
   onInit(api: ArrowsLayerAPI): void;
 
+  scale?: number;
+
+  transform?: string;
+
   elementToImage(svg?: SVGSVGElement): (pt: Point) => Point;
 
   addEventListener(svg?: SVGSVGElement): (name: keyof SVGSVGElementEventMap, handler: (evt: Event) => void, capture?: boolean) => () => void;
@@ -32,15 +36,16 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
     <svg 
       ref={svgRef}
       class={`a9s-arrows-layer ${styles.container}${enabled() ? ' enabled': ''}`}>
+      <g transform={props.transform}>
+        <ArrowTool 
+          addEventListener={props.addEventListener(svgRef)}
+          transform={props.elementToImage(svgRef)} 
+          onCreateArrow={arrow => setArrows(current => [...current, arrow])} />
 
-      <ArrowTool 
-        addEventListener={props.addEventListener(svgRef)}
-        transform={props.elementToImage(svgRef)} 
-        onCreateArrow={arrow => setArrows(current => [...current, arrow])} />
-
-      {arrows().map(arrow => (
-        <SvgArrow start={arrow.start} end={arrow.end} />
-      ))}
+        {arrows().map(arrow => (
+          <SvgArrow start={arrow.start} end={arrow.end} />
+        ))}
+      </g>
     </svg>
   )
 

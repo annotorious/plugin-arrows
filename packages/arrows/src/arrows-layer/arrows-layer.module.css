@@ -25,6 +25,7 @@
 .container :global(.a9s-arrow .a9s-arrow-buffer) {
   fill: none;
   stroke-opacity: 0;
+  vector-effect: non-scaling-stroke;
 }
 
 .container :global(.a9s-arrow .a9s-arrow-outer) {
@@ -32,12 +33,14 @@
   stroke: #000;
   stroke-width: 4px;
   stroke-opacity: 0.8;
+  vector-effect: non-scaling-stroke;
 }
 
 .container :global(.a9s-arrow .a9s-arrow-inner) {
   fill: none;
   stroke: #fff;
   stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
 }
 
 .container :global(.a9s-arrow .a9s-arrow-head) {
