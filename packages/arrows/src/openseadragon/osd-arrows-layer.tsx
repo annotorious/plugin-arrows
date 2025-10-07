@@ -17,7 +17,7 @@ export const OpenSeadragonArrowsLayer = (props: OpenSeadragonArrowsLayerProps) =
 
   const [scale, setScale] = createSignal(1);
 
-  const elementToImage = (svg?: SVGSVGElement) => (pt: Point) =>
+  const elementToImage = () => (pt: Point) =>
     props.viewer.viewport.viewerElementToImageCoordinates(new OpenSeadragon.Point(pt.x, pt.y));
 
   const addEventListener = (svg?: SVGSVGElement) => (

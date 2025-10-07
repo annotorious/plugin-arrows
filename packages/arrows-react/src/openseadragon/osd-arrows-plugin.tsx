@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { AnnotoriousOpenSeadragonAnnotator, AnnotoriousPlugin, useViewer } from '@annotorious/react';
+import { useEffect, useState } from 'react';
+import { AnnotoriousOpenSeadragonAnnotator, useAnnotator, useViewer } from '@annotorious/react';
 import { ArrowsPluginInstance, mountOSDPlugin as _mountPlugin } from '@annotorious/plugin-arrows';
 
 import '@annotorious/plugin-arrows/annotorious-arrows.css';
@@ -12,24 +12,31 @@ interface OSDArrowsPluginProps {
 
 export const OSDArrowsPlugin = (props: OSDArrowsPluginProps) => {
 
+  const anno = useAnnotator<AnnotoriousOpenSeadragonAnnotator>();
+
   const viewer = useViewer();
   
   const [instance, setInstance] = useState<ArrowsPluginInstance>();
 
-  const mountPlugin = useCallback((anno: AnnotoriousOpenSeadragonAnnotator) => {
-    if (!viewer) return;
+  useEffect(() => {
+    if (!anno || !viewer) return;
+
+    const tracker = Math.random();
+
     const { enabled: _, ...opts } = props;
-    return _mountPlugin(anno, viewer);
-  }, [viewer]);
+    const instance = _mountPlugin(anno, viewer);
+
+    setInstance(instance);
+
+    return () => {
+      instance.unmount();
+    }
+  }, [anno, viewer]);
 
   useEffect(() => {
     if (instance) instance.setEnabled(props.enabled);
   }, [instance, props.enabled]);
 
-  return (
-    <AnnotoriousPlugin
-      plugin={mountPlugin} 
-      onLoad={instance => setInstance(instance as ArrowsPluginInstance)} />
-  )
+  return null;
 
 }
