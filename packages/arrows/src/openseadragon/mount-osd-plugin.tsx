@@ -16,14 +16,18 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
   // plugin! Ensure that everything is properly set up before we init the
   // wires layer, because it will attach listeners to the annotation layer!
   const mountOSDArrowsLayer = (retries = 10) => {
-    const isReady = Boolean(viewer.element.querySelector('.a9s-gl-canvas'));
+    const isReady = Boolean(viewer.element);
     if (isReady) {
-      // In case the plugin was desposed while waiting for retry
-      if (wasDisposed) return;
+      setTimeout(() => {
+        // In case the plugin was desposed while waiting for retry
+        if (wasDisposed) return;
 
-      dispose = render(() => (
-        <OpenSeadragonArrowsLayer onInit={api => componentAPI = api} viewer={viewer} />
-      ), viewer.element);
+        console.log('rendering to', viewer.element);
+      
+        dispose = render(() => (
+          <OpenSeadragonArrowsLayer onInit={api => componentAPI = api} viewer={viewer} />
+        ), viewer.element);
+      }, 5000);
     } else if (retries > 0) {
       setTimeout(() => mountOSDArrowsLayer(retries - 1), 100)
     } else {
