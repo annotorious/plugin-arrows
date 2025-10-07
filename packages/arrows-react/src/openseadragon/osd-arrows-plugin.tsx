@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { AnnotoriousOpenSeadragonAnnotator, AnnotoriousPlugin, useViewer } from '@annotorious/react';
 import { ArrowsPluginInstance, mountOSDPlugin as _mountPlugin } from '@annotorious/plugin-arrows';
 
+import '@annotorious/plugin-arrows/annotorious-arrows.css';
+
 interface OSDArrowsPluginProps {
 
   enabled?: boolean;

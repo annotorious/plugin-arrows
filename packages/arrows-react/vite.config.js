@@ -32,7 +32,7 @@ export default defineConfig({
         'react-dom'
       ],
       output: {
-        assetFileNames: 'annotorious-arrows-react.[ext]'
+        assetFileNames: 'annotorious-arrows.[ext]'
       }
     },
     sourcemap: true

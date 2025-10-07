@@ -26,7 +26,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/annotorious-arrows-react.es.js"
     },
-    "./annotorious-wires-react.css": "./dist/annotorious-arrows-react.css"
+    "./annotorious-arrows.css": "./dist/annotorious-arrows.css"
   },
   "devDependencies": {
     "@types/react": "^19.2.0",
