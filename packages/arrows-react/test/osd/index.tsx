@@ -3,9 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { Annotorious } from '@annotorious/react';
 import { App } from './app';
 
-import '@annotorious/react/annotorious-react.css';
-import '@annotorious/plugin-arrows/annotorious-arrows.css';
-
 const root = createRoot(document.getElementById('root') as Element);
 root.render(
   <React.StrictMode>

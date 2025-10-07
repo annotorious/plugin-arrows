@@ -1,1 +1,2 @@
-export * from './ArrowsPlugin';
+export * from './openseadragon';
+export * from './arrows-plugin';
