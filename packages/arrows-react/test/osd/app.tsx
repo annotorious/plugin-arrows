@@ -10,6 +10,7 @@ import { OSDArrowsPlugin } from '../../src';
 
 import '@annotorious/openseadragon/annotorious-openseadragon.css';
 import '@annotorious/plugin-arrows/annotorious-arrows.css';
+import OpenSeadragon from 'openseadragon';
 
 const IIIF_SAMPLE = {
   "@context" : "http://iiif.io/api/image/2/context.json",
@@ -54,6 +55,8 @@ const OSD_OPTIONS: OpenSeadragon.Options = {
   }
 };
 
+const { tileSources: _, ...INITIAL_OPTIONS } = OSD_OPTIONS;
+
 export const App = () => {
 
   const [mode, setMode] = useState<'MOVE' | 'ANNOTATE' | 'RELATIONS'>('MOVE');
@@ -61,6 +64,15 @@ export const App = () => {
   const anno = useAnnotator<AnnotoriousOpenSeadragonAnnotator>();
 
   const [arrowsEnabled, setArrowsEnabled] = useState(false);
+
+  const [options, setOptions] = useState<OpenSeadragon.Options>(INITIAL_OPTIONS); 
+
+  useEffect(() => {
+    // Simulate delayed init
+    setTimeout(() => {
+      setOptions(OSD_OPTIONS);
+    }, 1000);
+  }, []);
 
   const toggleMode = () => setMode(mode => 
     mode === 'MOVE' ? 'ANNOTATE' :
@@ -86,7 +98,7 @@ export const App = () => {
         style={style}>
         <OpenSeadragonViewer 
           className="openseadragon" 
-          options={OSD_OPTIONS} />
+          options={options} />
 
         <OSDArrowsPlugin 
           enabled={arrowsEnabled} />

@@ -1,6 +1,6 @@
 {
   "name": "@annotorious/plugin-arrows",
-  "version": "0.0.2-beta",
+  "version": "0.0.2",
   "description": "Connecting annotations with arrows",
   "author": "Rainer Simon",
   "license": "BSD-3-Clause",
@@ -39,8 +39,8 @@
     "vite-plugin-solid": "^2.11.9"
   },
   "peerDependencies": {
-    "@annotorious/annotorious": "^3.7.8",
-    "@annotorious/openseadragon": "^3.7.8",
+    "@annotorious/annotorious": "^3.7.9",
+    "@annotorious/openseadragon": "^3.7.9",
     "openseadragon": "^4.0.0 || ^5.0.0"
   },
   "peerDependenciesMeta": {

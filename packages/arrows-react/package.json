@@ -1,6 +1,6 @@
 {
   "name": "@annotorious/plugin-arrows-react",
-  "version": "0.0.2-beta",
+  "version": "0.0.2",
   "description": "React bindings for the Annotorious arrows plugin.",
   "author": "Rainer Simon",
   "license": "BSD-3-Clause",
@@ -29,8 +29,8 @@
     "./annotorious-arrows.css": "./dist/annotorious-arrows.css"
   },
   "devDependencies": {
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
     "@vitejs/plugin-react": "^5.0.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -40,7 +40,7 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "peerDependencies": {
-    "@annotorious/react": "^3.7.8",
+    "@annotorious/react": "^3.7.9",
     "openseadragon": "^3.0.0 || ^4.0.0 || ^5.0.0",
     "react": ">=18.x || >=19.x",
     "react-dom": ">=18.x || >=19.x"
@@ -51,7 +51,7 @@
     }
   },
   "dependencies": {
-    "@annotorious/plugin-arrows": "0.0.2-beta"
+    "@annotorious/plugin-arrows": "0.0.2"
   },
   "sideEffects": false
 }

@@ -18,16 +18,12 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
   const mountOSDArrowsLayer = (retries = 10) => {
     const isReady = Boolean(viewer.element);
     if (isReady) {
-      setTimeout(() => {
-        // In case the plugin was desposed while waiting for retry
-        if (wasDisposed) return;
+      // In case the plugin was disposed while waiting for retry
+      if (wasDisposed) return;
 
-        console.log('rendering to', viewer.element);
-      
-        dispose = render(() => (
-          <OpenSeadragonArrowsLayer onInit={api => componentAPI = api} viewer={viewer} />
-        ), viewer.element);
-      }, 5000);
+      dispose = render(() => (
+        <OpenSeadragonArrowsLayer onInit={api => componentAPI = api} viewer={viewer} />
+      ), viewer.element);
     } else if (retries > 0) {
       setTimeout(() => mountOSDArrowsLayer(retries - 1), 100)
     } else {
