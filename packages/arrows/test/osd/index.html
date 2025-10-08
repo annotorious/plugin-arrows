@@ -4,11 +4,22 @@
     <meta charset='utf-8' />
     <title>Annotorious | Arrows Plugin | OpenSeadragon</title>
     <style>
-      html, body, #openseadragon {
+      html, body, #wrapper, #openseadragon {
         margin: 0;
         padding: 0;
         width: 100%;
         height: 100%;
+      }
+
+      #wrapper {
+        box-sizing: border-box;
+        padding: 30px;
+        position: relative;
+        background-color: red;
+      }
+
+      #openseadragon {
+        border: 1px solid green;
       }
 
       .openseadragon-canvas {
@@ -25,9 +36,11 @@
   </head>
 
   <body>
-    <div id="openseadragon">
-      <div class="buttons">
-        <button id="mode">Mode: Move</button>
+    <div id="wrapper">
+      <div id="openseadragon">
+        <div class="buttons">
+          <button id="mode">Mode: Move</button>
+        </div>
       </div>
     </div>
 
