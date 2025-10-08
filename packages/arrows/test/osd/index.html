@@ -7,19 +7,29 @@
       html, body, #wrapper, #openseadragon {
         margin: 0;
         padding: 0;
-        width: 100%;
-        height: 100%;
       }
 
       #wrapper {
-        box-sizing: border-box;
-        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      header {
+        background-color: green;
+        height: 60px;
+      }
+
+      main {
+        display: flex;
+        align-items: stretch;
+        flex-grow: 1;
+        background-color: yellow;
         position: relative;
-        background-color: red;
       }
 
       #openseadragon {
-        border: 1px solid green;
+        width: 100%;
       }
 
       .openseadragon-canvas {
@@ -37,11 +47,17 @@
 
   <body>
     <div id="wrapper">
-      <div id="openseadragon">
+      <header>
+        This is a header
+      </header>
+
+      <main>
         <div class="buttons">
           <button id="mode">Mode: Move</button>
         </div>
-      </div>
+
+        <div id="openseadragon"></div>
+      </main>
     </div>
 
     <script type='module'>

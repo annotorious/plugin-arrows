@@ -17,7 +17,7 @@ export const ImageArrowsLayer = (props: ImageArrowsLayerProps) => {
     svgPt.x = pt.x; 
     svgPt.y = pt.y;
   
-    return svgPt.matrixTransform(svg.getScreenCTM()!.inverse());
+    return svgPt.matrixTransform(svg.getCTM()!.inverse());
   }
 
   const addEventListener = (svg: SVGSVGElement) => (name: keyof SVGSVGElementEventMap, handler: (evt: Event) => void, capture?: boolean): () => void => {

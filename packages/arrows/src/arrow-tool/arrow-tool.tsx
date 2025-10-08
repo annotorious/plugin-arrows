@@ -21,7 +21,7 @@ export const ArrowTool = (props: ArrowToolProps) => {
   const [cursor, setCursor] = createSignal<Point | null>(null);
 
   const onPointerDown = (e: PointerEvent) => {
-    const pt = props.transform({ x: e.clientX, y: e.clientY });
+    const pt = props.transform({ x: e.offsetX, y: e.offsetY });
 
     const s = start();
     if (!s) {
@@ -40,7 +40,7 @@ export const ArrowTool = (props: ArrowToolProps) => {
 
   const onPointerMove = (e: PointerEvent) => {
     if (!start()) return;
-    const pt = props.transform({ x: e.clientX, y: e.clientY });
+    const pt = props.transform({ x: e.offsetX, y: e.offsetY });
     setCursor(pt);
   }
 
