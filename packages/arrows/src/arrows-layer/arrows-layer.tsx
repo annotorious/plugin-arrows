@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { createEffect, createSignal } from 'solid-js';
 import { useStore } from '@nanostores/solid';
 import { ArrowEditor } from '@/arrow-editor';
 import { ArrowTool } from '@/arrow-tool';
@@ -43,12 +43,25 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
     setMode
   });
 
-  const onClick = (arrow: Arrow) => selection.setSelected(arrow);
+  const onClickedArrow = (arrow: Arrow) => selection.setSelected(arrow);
+
+  const onPointerUp = (evt: PointerEvent) => {
+    if (!enabled() || mode() === 'draw') return;
+
+    if (evt.target !== svgRef) return;
+
+    selection.clearSelection();
+  }
+
+  createEffect(() => {
+    if (!enabled()) selection.clearSelection();
+  });
 
   return (
     <svg 
       ref={svgRef}
-      class={`a9s-arrows-layer ${styles.container}${enabled() ? ' enabled': ''}`}>
+      class={`a9s-arrows-layer ${styles.container}${enabled() ? ' enabled': ''}`}
+      onPointerUp={onPointerUp}>
       <g transform={props.transform}>
         {mode() === 'draw' && (
           <ArrowTool 
@@ -61,13 +74,14 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
         {arrows().map(arrow => arrow.id === selected() ? (
           <ArrowEditor 
             arrow={arrow} 
-            transform={props.elementToImage(svgRef)} />
+            transform={props.elementToImage(svgRef)} 
+            onUpdate={store.updateArrow} />
         ) : (
           <SvgArrow 
             start={arrow.start} 
             end={arrow.end} 
             viewportScale={props.scale} 
-            onClick={() => onClick(arrow)} />
+            onClick={() => onClickedArrow(arrow)} />
         ))}
       </g>
     </svg>

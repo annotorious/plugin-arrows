@@ -22,8 +22,10 @@ export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsP
 
   /** API **/
 
-  const setEnabled = (enabled: boolean) =>
+  const setEnabled = (enabled: boolean) => {
+    anno.cancelSelected();
     componentAPI?.setEnabled(enabled);
+  }
 
   const setMode = (mode: ArrowsPluginMode) =>
     componentAPI?.setMode(mode);
