@@ -14,40 +14,65 @@ interface ArrowToolProps {
 
 }
 
+const DRAG_TIME_THRESHOLD = 250;
+
 export const ArrowTool = (props: ArrowToolProps) => {
 
   const [start, setStart] = createSignal<Point | null>(null);
 
   const [cursor, setCursor] = createSignal<Point | null>(null);
 
-  const onPointerDown = (e: PointerEvent) => {
-    const pt = props.transform({ x: e.offsetX, y: e.offsetY });
+  let lastPointerDown: number | null = null;
+
+  const onPointerDown = (evt: PointerEvent) => {
+    const pt = props.transform({ x: evt.offsetX, y: evt.offsetY });
 
     const s = start();
     if (!s) {
       setStart(pt);
       setCursor(pt);
+
+      lastPointerDown = Date.now(); 
     } else {
-      if (s) {
-        const arrow = { start: s, end: pt };
-        props.onCreateArrow(arrow);
-      }
+      const arrow = { start: s, end: pt };
+      props.onCreateArrow(arrow);
 
       setStart(null);
       setCursor(null);
+
+      lastPointerDown = null;
     }
   }
 
-  const onPointerMove = (e: PointerEvent) => {
+  const onPointerMove = (evt: PointerEvent) => {
     if (!start()) return;
-    const pt = props.transform({ x: e.offsetX, y: e.offsetY });
+    const pt = props.transform({ x: evt.offsetX, y: evt.offsetY });
     setCursor(pt);
+  }
+
+  const onPointerUp = (evt: PointerEvent) => {
+    const s = start();
+
+    if (!s || lastPointerDown === null) return;
+
+    const duration = Date.now() - lastPointerDown;
+    if (duration >= DRAG_TIME_THRESHOLD) {
+      const pt = props.transform({ x: evt.offsetX, y: evt.offsetY });
+      const arrow = { start: s, end: pt };
+      props.onCreateArrow(arrow);
+
+      setStart(null);
+      setCursor(null);
+      
+      lastPointerDown = null;
+    }
   }
 
   onMount(() => {
     const cleanups = [
       props.addEventListener('pointerdown', onPointerDown),
-      props.addEventListener('pointermove', onPointerMove)
+      props.addEventListener('pointermove', onPointerMove),
+      props.addEventListener('pointerup', onPointerUp)
     ];
 
     onCleanup(() => {
