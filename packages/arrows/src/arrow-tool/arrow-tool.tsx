@@ -1,4 +1,5 @@
-import { createMemo, createSignal, onCleanup, onMount } from 'solid-js';
+import { createSignal, onCleanup, onMount } from 'solid-js';
+import { v4 as uuidv4 } from 'uuid';
 import { Arrow, Point } from '@/types';
 import { SvgArrow } from '@/arrows-layer/svg-arrow';
 
@@ -34,7 +35,7 @@ export const ArrowTool = (props: ArrowToolProps) => {
 
       lastPointerDown = Date.now(); 
     } else {
-      const arrow = { start: s, end: pt };
+      const arrow = { id: uuidv4(), start: s, end: pt };
       props.onCreateArrow(arrow);
 
       setStart(null);
@@ -58,7 +59,7 @@ export const ArrowTool = (props: ArrowToolProps) => {
     const duration = Date.now() - lastPointerDown;
     if (duration >= DRAG_TIME_THRESHOLD) {
       const pt = props.transform({ x: evt.offsetX, y: evt.offsetY });
-      const arrow = { start: s, end: pt };
+      const arrow = { id: uuidv4(), start: s, end: pt };
       props.onCreateArrow(arrow);
 
       setStart(null);

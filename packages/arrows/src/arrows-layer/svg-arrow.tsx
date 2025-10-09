@@ -1,6 +1,6 @@
 import { getArrow } from 'perfect-arrows';
-import { Arrow } from '@/types';
 import { createMemo } from 'solid-js';
+import { clsx } from 'clsx';
 import { Point } from 'dist/types';
 
 interface SvgArrowProps {
@@ -12,6 +12,8 @@ interface SvgArrowProps {
   class?: string;
 
   viewportScale?: number;
+
+  onClick?(): void;
 
 }
 
@@ -40,22 +42,32 @@ export const SvgArrow = (props: SvgArrowProps) => {
   });
 
   return (
-    <g class={`a9s-arrow${props.class ? ` ${props.class}` : ''}`}>
-      <path class="a9s-arrow-buffer" d={d()} />
-      <path class="a9s-arrow-outer" d={d()} />
+    <g class={clsx('a9s-arrow', props.class)}>
+      <path 
+        class="a9s-arrow-buffer" 
+        d={d()} 
+        onClick={props.onClick} />
+
+      <path 
+        class="a9s-arrow-outer" 
+        d={d()} />
 
       <circle 
         class="a9s-arrow-base"
         cx={arrowData()[0]} 
         cy={arrowData()[1]} 
-        r={4 * scale()} />
+        r={4 * scale()} 
+        onClick={props.onClick} />
 
       <polygon
         class="a9s-arrow-head"
         points="0,-6 12,0, 0,6"
-        transform={`translate(${arrowData()[4]},${arrowData()[5]}) rotate(${endAngleAsDegrees()}) scale(${scale()})`} />
+        transform={`translate(${arrowData()[4]},${arrowData()[5]}) rotate(${endAngleAsDegrees()}) scale(${scale()})`} 
+        onClick={props.onClick} />
 
-      <path class="a9s-arrow-inner" d={d()} />
+      <path
+        class="a9s-arrow-inner"
+        d={d()} />
     </g>
   )
 

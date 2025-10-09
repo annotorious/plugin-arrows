@@ -1,5 +1,6 @@
 import { createSignal } from 'solid-js';
 import { useStore } from '@nanostores/solid';
+import { ArrowEditor } from '@/arrow-editor';
 import { ArrowTool } from '@/arrow-tool';
 import { Arrow, ArrowsPluginMode, ArrowState, Point } from '@/types';
 import { ArrowsLayerAPI } from './arrows-layer-api';
@@ -31,14 +32,18 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
 
   const [mode, setMode] = createSignal<ArrowsPluginMode>('draw');
 
-  const { store } = props.state;
+  const { store, selection } = props.state;
 
   const arrows = useStore(store.arrows);
+
+  const selected = useStore(selection.selectedIds);
 
   props.onInit({
     setEnabled,
     setMode
   });
+
+  const onClick = (arrow: Arrow) => selection.setSelected(arrow);
 
   return (
     <svg 
@@ -53,11 +58,15 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
             onCreateArrow={store.addArrow} />
         )}
 
-        {arrows().map(arrow => (
+        {arrows().map(arrow => arrow.id === selected() ? (
+          <ArrowEditor 
+            arrow={arrow} />
+        ) : (
           <SvgArrow 
             start={arrow.start} 
             end={arrow.end} 
-            viewportScale={props.scale} />
+            viewportScale={props.scale} 
+            onClick={() => onClick(arrow)} />
         ))}
       </g>
     </svg>
