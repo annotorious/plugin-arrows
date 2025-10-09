@@ -33,6 +33,7 @@ export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsP
   }
 
   return { 
+    on: store.on,
     setEnabled,
     setMode,
     unmount

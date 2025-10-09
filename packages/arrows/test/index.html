@@ -8,7 +8,8 @@
   <body>
     <div id="content">
       <div>
-        <button id="enable">Enabled</button>
+        <button id="tool">Annotate</button>
+        <button id="arrow-mode" disabled>Draw</button>
       </div>
       <img id="sample-image" src="640px-Hallstatt.jpg" />
     </div>
@@ -23,15 +24,33 @@
         const anno = createImageAnnotator('sample-image');
 
         const arrowsPlugin = mountImagePlugin(anno);
-        arrowsPlugin.setEnabled(true);
 
-        const enableBtn = document.getElementById('enable');
-        enableBtn.addEventListener('click', () => {
-          if (enableBtn.innerText === 'Disabled') {
-            enableBtn.innerText = 'Enabled';
+        const arrowModeBtn = document.getElementById('arrow-mode');
+        arrowModeBtn.addEventListener('click', () => {
+          if (arrowModeBtn.innerText === 'Draw') {
+            arrowModeBtn.innerText = 'Select';
+            arrowsPlugin.setMode('select');
+          } else {
+            arrowModeBtn.innerText = 'Draw';
+            arrowsPlugin.setMode('draw');
+          }
+        });
+
+        arrowsPlugin.on('createArrow', a => { 
+          console.log(a);
+          arrowsPlugin.setMode('select');
+          arrowModeBtn.innerText = 'Select';
+        });
+
+        const toolBtn = document.getElementById('tool');
+        toolBtn.addEventListener('click', () => {
+          if (toolBtn.innerText === 'Annotate') {
+            toolBtn.innerText = 'Arrows';
+            arrowModeBtn.disabled = false;
             arrowsPlugin.setEnabled(true);
           } else {
-            enableBtn.innerText = 'Disabled';
+            toolBtn.innerText = 'Annotate';
+            arrowModeBtn.disabled = true;
             arrowsPlugin.setEnabled(false);
           }
         });
