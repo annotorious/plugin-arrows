@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnnotoriousOpenSeadragonAnnotator, useAnnotator, useViewer } from '@annotorious/react';
-import { ArrowsPluginInstance, ArrowsPluginMode, mountOSDPlugin as _mountPlugin } from '@annotorious/plugin-arrows';
+import { Arrow, ArrowsPluginInstance, ArrowsPluginMode, mountOSDPlugin as _mountPlugin } from '@annotorious/plugin-arrows';
 
 import '@annotorious/plugin-arrows/annotorious-arrows.css';
 
@@ -9,6 +9,8 @@ interface OSDArrowsPluginProps {
   enabled?: boolean;
 
   mode?: ArrowsPluginMode;
+
+  onCreate?(arrow: Arrow): void;
 
 }
 
@@ -20,11 +22,17 @@ export const OSDArrowsPlugin = (props: OSDArrowsPluginProps) => {
   
   const [instance, setInstance] = useState<ArrowsPluginInstance>();
 
+  const onCreateRef = useRef(props.onCreate);
+
+  useEffect(() => { onCreateRef.current = props.onCreate; }, [props.onCreate]);
+
   useEffect(() => {
     if (!anno || !viewer) return;
 
     const { enabled: _, ...opts } = props;
     const instance = _mountPlugin(anno, viewer);
+
+    instance.on('createArrow', arrow => onCreateRef.current?.(arrow));
 
     setInstance(instance);
 

@@ -11,6 +11,7 @@ import { OSDArrowsPlugin } from '../../src';
 import '@annotorious/openseadragon/annotorious-openseadragon.css';
 import '@annotorious/plugin-arrows/annotorious-arrows.css';
 import OpenSeadragon from 'openseadragon';
+import { Arrow } from '@annotorious/plugin-arrows';
 
 const IIIF_SAMPLE = {
   "@context" : "http://iiif.io/api/image/2/context.json",
@@ -59,11 +60,13 @@ const { tileSources: _, ...INITIAL_OPTIONS } = OSD_OPTIONS;
 
 export const App = () => {
 
-  const [mode, setMode] = useState<'MOVE' | 'ANNOTATE' | 'RELATIONS'>('MOVE');
-
   const anno = useAnnotator<AnnotoriousOpenSeadragonAnnotator>();
 
+  const [tool, setTool] = useState<'move' | 'annotate' | 'arrows'>('move');
+
   const [arrowsEnabled, setArrowsEnabled] = useState(false);
+
+  const [arrowMode, setArrowMode] = useState<'select' | 'draw'>('select');
 
   const [options, setOptions] = useState<OpenSeadragon.Options>(INITIAL_OPTIONS); 
 
@@ -74,34 +77,46 @@ export const App = () => {
     }, 1000);
   }, []);
 
-  const toggleMode = () => setMode(mode => 
-    mode === 'MOVE' ? 'ANNOTATE' :
-    mode === 'ANNOTATE' ? 'RELATIONS' :
-    'MOVE');
+  const toggleTool = () => setTool(tool => 
+    tool === 'move' ? 'annotate' :
+    tool === 'annotate' ? 'arrows' :
+    'move');
+
+  const toggleArrowMode = () => setArrowMode(mode =>
+    mode === 'draw' ? 'select' : 'draw');
 
   useEffect(() => {
     if (!anno) return;
 
-    anno.setDrawingEnabled(mode === 'ANNOTATE');
-    setArrowsEnabled(mode === 'RELATIONS');
-  }, [anno, mode]);
+    anno.setDrawingEnabled(tool === 'annotate');
+    setArrowsEnabled(tool === 'arrows');
+  }, [anno, tool]);
+
+  const onCreateArrow = () => setArrowMode('select')
 
   return (
     <div>
       <div className="buttons">
-        <button onClick={toggleMode}>
-          {mode}
+        <button onClick={toggleTool}>
+          {tool.toUpperCase()}
+        </button>
+
+        <button onClick={toggleArrowMode}>
+          {arrowMode.toUpperCase()}
         </button>
       </div>
 
       <OpenSeadragonAnnotator 
+        drawingMode="drag"
         style={style}>
         <OpenSeadragonViewer 
           className="openseadragon" 
           options={options} />
 
         <OSDArrowsPlugin 
-          enabled={arrowsEnabled} />
+          enabled={arrowsEnabled} 
+          mode={arrowMode} 
+          onCreate={onCreateArrow} />
       </OpenSeadragonAnnotator>
     </div>
   )
