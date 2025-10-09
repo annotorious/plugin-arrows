@@ -1,6 +1,6 @@
 {
   "name": "@annotorious/plugin-arrows-react",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "React bindings for the Annotorious arrows plugin.",
   "author": "Rainer Simon",
   "license": "BSD-3-Clause",
@@ -51,7 +51,7 @@
     }
   },
   "dependencies": {
-    "@annotorious/plugin-arrows": "0.0.3"
+    "@annotorious/plugin-arrows": "0.0.4"
   },
   "sideEffects": false
 }
