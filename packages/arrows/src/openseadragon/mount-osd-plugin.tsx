@@ -55,8 +55,8 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
 
   const setMode = (mode: ArrowsPluginMode) => {
     componentAPI?.setMode(mode);
-    console.log('setting mouse nav', mode === 'select');
-    viewer.setMouseNavEnabled(mode === 'select');
+    if (componentAPI?.isEnabled)
+      viewer.setMouseNavEnabled(mode === 'select');
   }
   
   const unmount = () => {

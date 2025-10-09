@@ -42,6 +42,9 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
   const selected = useStore(selection.selectedIds);
 
   props.onInit({
+    get isEnabled() {
+      return enabled();
+    },
     setEnabled,
     setMode
   });
