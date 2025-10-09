@@ -1,6 +1,7 @@
 import { createSignal } from 'solid-js';
+import { useStore } from '@nanostores/solid';
 import { ArrowTool } from '@/arrow-tool';
-import { Arrow, Point } from '@/types';
+import { Arrow, ArrowsPluginMode, ArrowState, Point } from '@/types';
 import { ArrowsLayerAPI } from './arrows-layer-api';
 import { SvgArrow } from './svg-arrow';
 
@@ -9,6 +10,8 @@ import styles from './arrows-layer.module.css';
 export interface ArrowsLayerProps {
 
   onInit(api: ArrowsLayerAPI): void;
+
+  state: ArrowState;
 
   scale?: number;
 
@@ -26,10 +29,15 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
 
   const [enabled, setEnabled] = createSignal(false);
 
-  const [arrows, setArrows] = createSignal<Arrow[]>([]);
+  const [mode, setMode] = createSignal<ArrowsPluginMode>('draw');
+
+  const { store } = props.state;
+
+  const arrows = useStore(store.arrows);
 
   props.onInit({
-    setEnabled
+    setEnabled,
+    setMode
   });
 
   return (
@@ -37,11 +45,13 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
       ref={svgRef}
       class={`a9s-arrows-layer ${styles.container}${enabled() ? ' enabled': ''}`}>
       <g transform={props.transform}>
-        <ArrowTool 
-          addEventListener={props.addEventListener(svgRef)}
-          transform={props.elementToImage(svgRef)} 
-          viewportScale={props.scale}
-          onCreateArrow={arrow => setArrows(current => [...current, arrow])} />
+        {mode() === 'draw' && (
+          <ArrowTool 
+            addEventListener={props.addEventListener(svgRef)}
+            transform={props.elementToImage(svgRef)} 
+            viewportScale={props.scale}
+            onCreateArrow={store.addArrow} />
+        )}
 
         {arrows().map(arrow => (
           <SvgArrow 

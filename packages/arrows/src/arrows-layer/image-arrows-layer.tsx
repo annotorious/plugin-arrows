@@ -1,8 +1,10 @@
-import { Point } from '@/types';
+import { ArrowState, Point } from '@/types';
 import { ArrowsLayerAPI } from './arrows-layer-api';
 import { ArrowsLayer } from './arrows-layer';
 
 interface ImageArrowsLayerProps {
+
+  state: ArrowState;
 
   onInit(api: ArrowsLayerAPI): void;
 
@@ -30,9 +32,10 @@ export const ImageArrowsLayer = (props: ImageArrowsLayerProps) => {
 
   return (
     <ArrowsLayer
-      onInit={props.onInit}
+      addEventListener={addEventListener}      
       elementToImage={elementToImage}
-      addEventListener={addEventListener} />
+      state={props.state}
+      onInit={props.onInit} />
   )
 
 }
