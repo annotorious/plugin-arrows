@@ -1,9 +1,13 @@
 import { createSignal, onCleanup, onMount } from 'solid-js';
 import OpenSeadragon from 'openseadragon';
 import { ArrowsLayer, ArrowsLayerAPI } from '@/arrows-layer';
-import { Point } from '@/types';
+import { ArrowState, Point } from '@/types';
+
+import styles from './osd-arrows-layer.module.css';
 
 interface OpenSeadragonArrowsLayerProps {
+
+  state: ArrowState;
 
   viewer: OpenSeadragon.Viewer;
 
@@ -77,21 +81,28 @@ export const OpenSeadragonArrowsLayer = (props: OpenSeadragonArrowsLayerProps) =
     setScale(zoom * containerWidth / props.viewer.world.getContentFactor());
   }
 
+  const onCanvasClick = () =>
+    props.state.selection.clearSelection();
+
   onMount(() => {
+    props.viewer.addHandler('canvas-click', onCanvasClick);
     props.viewer.addHandler('update-viewport', onUpdateViewport);
 
     onCleanup(() => {
+      props.viewer.removeHandler('canvas-click', onCanvasClick);
       props.viewer.removeHandler('update-viewport', onUpdateViewport);
     })
   });
 
   return (
     <ArrowsLayer
-      onInit={props.onInit}
-      scale={scale()}
-      transform={transform()}
+      addEventListener={addEventListener} 
+      class={styles.container}
       elementToImage={elementToImage}
-      addEventListener={addEventListener} />
+      scale={scale()}
+      state={props.state}
+      transform={transform()}
+      onInit={props.onInit} />
   )
 
 }

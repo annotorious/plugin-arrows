@@ -1,0 +1,7 @@
+.container:global(.select) {
+  pointer-events: none;
+}
+
+.container:global(.select) * {
+  pointer-events: all;
+} 

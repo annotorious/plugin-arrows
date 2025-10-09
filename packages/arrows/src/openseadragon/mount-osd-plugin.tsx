@@ -2,10 +2,18 @@ import { render } from 'solid-js/web';
 import OpenSeadragon from 'openseadragon';
 import { OpenSeadragonAnnotator } from '@annotorious/openseadragon';
 import { ArrowsLayerAPI } from '@/arrows-layer';
+import { createArrowSelection, createArrowStore } from '@/state';
+import { ArrowsPluginInstance, ArrowsPluginMode } from '@/types';
 import { OpenSeadragonArrowsLayer } from './osd-arrows-layer';
 
-export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadragon.Viewer) => {
+export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadragon.Viewer): ArrowsPluginInstance => {
 
+  const store = createArrowStore();
+
+  const selection = createArrowSelection(store);
+
+  const state = { store, selection };
+  
   let componentAPI: ArrowsLayerAPI |  null = null;
 
   let dispose = () => {};
@@ -22,7 +30,10 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
       if (wasDisposed) return;
 
       dispose = render(() => (
-        <OpenSeadragonArrowsLayer onInit={api => componentAPI = api} viewer={viewer} />
+        <OpenSeadragonArrowsLayer 
+          onInit={api => componentAPI = api} 
+          state={state}
+          viewer={viewer} />
       ), viewer.element);
     } else if (retries > 0) {
       setTimeout(() => mountOSDArrowsLayer(retries - 1), 100)
@@ -41,6 +52,12 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
 
     componentAPI?.setEnabled(enabled);
   }
+
+  const setMode = (mode: ArrowsPluginMode) => {
+    componentAPI?.setMode(mode);
+    console.log('setting mouse nav', mode === 'select');
+    viewer.setMouseNavEnabled(mode === 'select');
+  }
   
   const unmount = () => {
     wasDisposed = true;
@@ -48,7 +65,9 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
   }
 
   return { 
+    on: store.on,
     setEnabled,
+    setMode,
     unmount
   }
 

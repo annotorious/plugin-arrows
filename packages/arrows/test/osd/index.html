@@ -53,7 +53,8 @@
 
       <main>
         <div class="buttons">
-          <button id="mode">Mode: Move</button>
+          <button id="tool">Move</button>
+          <button id="arrow-mode" disabled>Draw</button>
         </div>
 
         <div id="openseadragon"></div>
@@ -106,24 +107,41 @@
         });
 
         const anno = createOSDAnnotator(viewer); 
-        const arrows = mountOSDPlugin(anno, viewer);
+        const arrowsPlugin = mountOSDPlugin(anno, viewer);
 
-        var button = document.getElementById('mode');
-        var mode = 'MOVE'; // | 'ANNOTATE' | 'RELATIONS'
-        button.addEventListener('click', function() {
-          if (mode === 'MOVE') {
-            mode = 'ANNOTATE';
-            button.innerHTML = 'Mode: Annotate';
-            anno.setDrawingEnabled(true);
-          } else if (mode === 'ANNOTATE') {
-            mode = 'RELATIONS';
-            button.innerHTML = 'Mode: Relations';
-            anno.setDrawingEnabled(false);
-            arrows.setEnabled(true);
+        const arrowModeBtn = document.getElementById('arrow-mode');
+          arrowModeBtn.addEventListener('click', () => {
+          if (arrowModeBtn.innerText === 'Draw') {
+            arrowModeBtn.innerText = 'Select';
+            arrowsPlugin.setMode('select');
           } else {
-            mode = 'MOVE';
-            button.innerHTML = 'Mode: Move';
-            arrows.setEnabled(false);
+            arrowModeBtn.innerText = 'Draw';
+            arrowsPlugin.setMode('draw');
+          }
+        });
+
+        arrowsPlugin.on('createArrow', a => { 
+          console.log(a);
+          arrowsPlugin.setMode('select');
+          arrowModeBtn.innerText = 'Select';
+        });
+
+        const toolBtn = document.getElementById('tool');
+        toolBtn.addEventListener('click', () => {
+          if (toolBtn.innerText === 'Move') {
+            toolBtn.innerText = 'Annotate';
+            arrowModeBtn.disabled = true;
+            anno.setDrawingEnabled(true);
+          } else if (toolBtn.innerText === 'Annotate') {
+            toolBtn.innerText = 'Arrows';
+            anno.setDrawingEnabled(false);
+            arrowModeBtn.disabled = false;
+            arrowsPlugin.setEnabled(true);
+          } else {
+            toolBtn.innerText = 'Move';
+            arrowModeBtn.disabled = true;
+            anno.setDrawingEnabled(false);
+            arrowsPlugin.setEnabled(false);
           }
         });
       }
