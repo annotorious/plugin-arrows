@@ -60,7 +60,8 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
 
         {arrows().map(arrow => arrow.id === selected() ? (
           <ArrowEditor 
-            arrow={arrow} />
+            arrow={arrow} 
+            transform={props.elementToImage(svgRef)} />
         ) : (
           <SvgArrow 
             start={arrow.start} 
