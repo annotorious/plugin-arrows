@@ -106,7 +106,10 @@
           }
         });
 
-        const anno = createOSDAnnotator(viewer); 
+        const anno = createOSDAnnotator(viewer, {
+          drawingMode: 'drag'
+        });
+
         const arrowsPlugin = mountOSDPlugin(anno, viewer);
 
         const arrowModeBtn = document.getElementById('arrow-mode');

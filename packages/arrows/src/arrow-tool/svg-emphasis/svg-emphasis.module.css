@@ -1,5 +1,6 @@
 .container :global(rect) {
   fill: none;
-  stroke: red;
+  stroke: oklch(74% 0.238 322.16);
   stroke-width: 3px;
+  vector-effect: non-scaling-stroke;
 }

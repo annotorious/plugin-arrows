@@ -1,5 +1,6 @@
 import { render } from 'solid-js/web';
 import OpenSeadragon from 'openseadragon';
+import type { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
 import { OpenSeadragonAnnotator } from '@annotorious/openseadragon';
 import { ArrowsLayerAPI } from '@/arrows-layer';
 import { createArrowSelection, createArrowStore } from '@/state';
@@ -31,6 +32,7 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
 
       dispose = render(() => (
         <OpenSeadragonArrowsLayer 
+          annoStore={anno.state.store as ImageAnnotationStore<ImageAnnotation>}
           onInit={api => componentAPI = api} 
           state={state}
           viewer={viewer} />
