@@ -1,5 +1,5 @@
 import { ArrowSelection, ArrowStore } from './state';
-import { ArrowStoreEvents } from './state';
+import { ArrowLifecycleEvents } from './state';
 
 export interface Arrow {
 
@@ -27,7 +27,7 @@ export type ArrowsPluginMode = 'draw' | 'select';
 
 export interface ArrowsPluginInstance {
 
-  on<T extends keyof ArrowStoreEvents>(event: T, callback: ArrowStoreEvents[T]): void;
+  on<T extends keyof ArrowLifecycleEvents>(event: T, callback: ArrowLifecycleEvents[T]): void;
 
   setEnabled(enabled: boolean): void;
 

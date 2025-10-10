@@ -1,13 +1,15 @@
 import { atom } from 'nanostores';
 import { createNanoEvents } from 'nanoevents';
 import { Arrow } from '@/types';
-import { ArrowStoreEvents } from './arrow-store-events';
+import { ArrowLifecycleEvents } from './arrow-lifecycle-events';
 
 export const createArrowStore = () => {
 
   const arrows = atom<Arrow[]>([]);
 
-  const emitter = createNanoEvents<ArrowStoreEvents>();
+  const emitter = createNanoEvents<ArrowLifecycleEvents>();
+
+  const getArrow = (id: string) => arrows.get().find(a => a.id === id);
 
   const addArrow = (arrow: Arrow) => {
     arrows.set([...arrows.get(), arrow]);
@@ -28,12 +30,13 @@ export const createArrowStore = () => {
     }
   }
 
-  const on = <E extends keyof ArrowStoreEvents>(event: E, callback: ArrowStoreEvents[E]) => 
+  const on = <E extends keyof ArrowLifecycleEvents>(event: E, callback: ArrowLifecycleEvents[E]) => 
     emitter.on(event, callback);
 
   return {
     arrows,
     addArrow,
+    getArrow,
     on,
     removeArrow,
     updateArrow

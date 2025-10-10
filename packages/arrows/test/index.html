@@ -42,6 +42,8 @@
           arrowModeBtn.innerText = 'Select';
         });
 
+        arrowsPlugin.on('selectArrow', a => console.log('selected', a));
+
         const toolBtn = document.getElementById('tool');
         toolBtn.addEventListener('click', () => {
           if (toolBtn.innerText === 'Annotate') {

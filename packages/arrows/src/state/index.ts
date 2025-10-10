@@ -1,3 +1,3 @@
+export * from './arrow-lifecycle-events';
 export * from './arrow-selection';
-export * from './arrow-store-events';
 export * from './arrow-store';

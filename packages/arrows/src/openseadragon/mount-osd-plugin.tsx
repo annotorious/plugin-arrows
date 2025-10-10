@@ -3,7 +3,7 @@ import OpenSeadragon from 'openseadragon';
 import type { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
 import { OpenSeadragonAnnotator } from '@annotorious/openseadragon';
 import { ArrowsLayerAPI } from '@/arrows-layer';
-import { createArrowSelection, createArrowStore } from '@/state';
+import { createArrowSelection, createArrowStore, createLifecycleObserver } from '@/state';
 import { ArrowsPluginInstance, ArrowsPluginMode } from '@/types';
 import { OpenSeadragonArrowsLayer } from './osd-arrows-layer';
 
@@ -12,6 +12,8 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
   const store = createArrowStore();
 
   const selection = createArrowSelection(store);
+
+  const lifecycle = createLifecycleObserver(store, selection);
 
   const state = { store, selection };
   
@@ -67,7 +69,7 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
   }
 
   return { 
-    on: store.on,
+    on: lifecycle.on,
     setEnabled,
     setMode,
     unmount

@@ -1,7 +1,7 @@
 import { render } from 'solid-js/web';
 import type { ImageAnnotation, ImageAnnotationStore, ImageAnnotator } from '@annotorious/annotorious';
 import { ImageArrowsLayer, ArrowsLayerAPI } from './arrows-layer';
-import { createArrowStore, createArrowSelection } from './state';
+import { createArrowStore, createArrowSelection, createLifecycleObserver } from './state';
 import { ArrowsPluginInstance, ArrowsPluginMode } from './types';
 
 export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsPluginInstance => {
@@ -9,6 +9,8 @@ export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsP
   const store = createArrowStore();
 
   const selection = createArrowSelection(store);
+
+  const lifecycle = createLifecycleObserver(store, selection);
 
   const state = { store, selection };
 
@@ -36,7 +38,7 @@ export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsP
   }
 
   return { 
-    on: store.on,
+    on: lifecycle.on,
     setEnabled,
     setMode,
     unmount
