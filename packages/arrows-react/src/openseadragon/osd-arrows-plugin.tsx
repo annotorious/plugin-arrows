@@ -28,6 +28,7 @@ export const OSDArrowsPlugin = (props: OSDArrowsPluginProps) => {
   const onSelectRef = useRef(props.onSelect);
 
   useEffect(() => { onCreateRef.current = props.onCreate; }, [props.onCreate]);
+  useEffect(() => { onSelectRef.current = props.onSelect; }, [props.onSelect]);
 
   useEffect(() => {
     if (!anno || !viewer) return;
