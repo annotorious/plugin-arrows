@@ -15,28 +15,29 @@
   cursor: pointer;
   fill: #fff;
   stroke: #000;
-  stroke-width: 1.5px;
+  stroke-width: 1px;
+  stroke-opacity: 0.35;
   vector-effect: non-scaling-stroke;
 }
 
 .container :global(.a9s-arrow .a9s-arrow-buffer) {
   cursor: pointer;
   fill: none;
-  stroke-width: 10px;
+  stroke-width: 8px;
   stroke-opacity: 0;
   vector-effect: non-scaling-stroke;
 }
 
 .container :global(.a9s-arrow.a9s-arrow-editor .a9s-arrow-buffer) {
-  stroke: red;
-  stroke-opacity: 0.35
+  stroke: #fff;
+  stroke-opacity: 0.5
 }
 
 .container :global(.a9s-arrow .a9s-arrow-outer) {
   fill: none;
   stroke: #000;
-  stroke-width: 4px;
-  stroke-opacity: 0.8;
+  stroke-width: 3.5px;
+  stroke-opacity: 0.35;
   vector-effect: non-scaling-stroke;
   pointer-events: none;
 }
@@ -53,6 +54,7 @@
   cursor: pointer;
   fill: #fff;
   stroke: #000;
+  stroke-opacity: 0.35;
   stroke-width: 1px;
 }
 
