@@ -1,3 +1,4 @@
+import { For, createMemo } from 'solid-js';
 import { multipolygonElementToPath } from '@annotorious/annotorious';
 import type { ImageAnnotation, MultiPolygonGeometry } from '@annotorious/annotorious';
 
@@ -9,15 +10,19 @@ interface SvgEmphasisMultiPolygonProps {
 
 export const SvgEmphasisMultiPolygon = (props: SvgEmphasisMultiPolygonProps) => {
 
-  const { polygons } = props.annotation.target.selector.geometry as MultiPolygonGeometry;
+  const polygons = createMemo(() => 
+    (props.annotation.target.selector.geometry as MultiPolygonGeometry).polygons
+  );
 
   return (
     <g>
-      {polygons.map(polygon => (
-        <path 
-          fill-rule="evenodd"
-          d={multipolygonElementToPath(polygon)} />
-      ))}
+      <For each={polygons()}>
+        {(polygon) => (
+          <path 
+            fill-rule="evenodd"
+            d={multipolygonElementToPath(polygon)} />
+        )}
+      </For>
     </g>
   )
 

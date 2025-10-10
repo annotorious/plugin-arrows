@@ -1,3 +1,4 @@
+import { createMemo } from 'solid-js';
 import type { ImageAnnotation, PolygonGeometry } from '@annotorious/annotorious';
 
 interface SvgEmphasisPolygonProps {
@@ -8,10 +9,11 @@ interface SvgEmphasisPolygonProps {
 
 export const SvgEmphasisPolygon = (props: SvgEmphasisPolygonProps) => {
 
-  const { points } = props.annotation.target.selector.geometry as PolygonGeometry;
+  const points = createMemo(() => 
+    (props.annotation.target.selector.geometry as PolygonGeometry).points);
 
   return (
-    <polygon points={points.map(xy => xy.join(',')).join(' ')} />
+    <polygon points={points().map(xy => xy.join(',')).join(' ')} />
   )
 
 }
