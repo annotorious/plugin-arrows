@@ -19,9 +19,8 @@ export interface ArrowAnchor {
 
 } 
 
-export const isArrowAnchor = (value: Point | ArrowAnchor): value is ArrowAnchor => {
-  return 'annotationId' in value;
-}
+export const isArrowAnchor = (value: Point | ArrowAnchor): value is ArrowAnchor =>
+  value && 'annotationId' in value;
 
 export type ArrowsPluginMode = 'draw' | 'select';
 

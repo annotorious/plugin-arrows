@@ -12,6 +12,8 @@ interface OSDArrowsPluginProps {
 
   onCreate?(arrow: Arrow): void;
 
+  onSelect?(arrow?: Arrow): void;
+
 }
 
 export const OSDArrowsPlugin = (props: OSDArrowsPluginProps) => {
@@ -23,6 +25,7 @@ export const OSDArrowsPlugin = (props: OSDArrowsPluginProps) => {
   const [instance, setInstance] = useState<ArrowsPluginInstance>();
 
   const onCreateRef = useRef(props.onCreate);
+  const onSelectRef = useRef(props.onSelect);
 
   useEffect(() => { onCreateRef.current = props.onCreate; }, [props.onCreate]);
 
@@ -33,6 +36,7 @@ export const OSDArrowsPlugin = (props: OSDArrowsPluginProps) => {
     const instance = _mountPlugin(anno, viewer);
 
     instance.on('createArrow', arrow => onCreateRef.current?.(arrow));
+    instance.on('selectArrow', arrow => onSelectRef.current?.(arrow));
 
     setInstance(instance);
 

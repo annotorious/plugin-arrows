@@ -92,7 +92,8 @@ export const App = () => {
     setArrowsEnabled(tool === 'arrows');
   }, [anno, tool]);
 
-  const onCreateArrow = () => setArrowMode('select')
+  const onCreateArrow = () => setArrowMode('select');
+  const onSelectArrow = (a?: Arrow) => console.log('select', a);
 
   return (
     <div>
@@ -116,7 +117,8 @@ export const App = () => {
         <OSDArrowsPlugin 
           enabled={arrowsEnabled} 
           mode={arrowMode} 
-          onCreate={onCreateArrow} />
+          onCreate={onCreateArrow} 
+          onSelect={onSelectArrow} />
       </OpenSeadragonAnnotator>
     </div>
   )
