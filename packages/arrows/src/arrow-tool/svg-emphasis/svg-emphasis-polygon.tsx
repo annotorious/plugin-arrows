@@ -1,4 +1,4 @@
-import { ImageAnnotation } from '@annotorious/annotorious';
+import type { ImageAnnotation, PolygonGeometry } from '@annotorious/annotorious';
 
 interface SvgEmphasisPolygonProps {
 
@@ -8,6 +8,10 @@ interface SvgEmphasisPolygonProps {
 
 export const SvgEmphasisPolygon = (props: SvgEmphasisPolygonProps) => {
 
-  return null;
+  const { points } = props.annotation.target.selector.geometry as PolygonGeometry;
+
+  return (
+    <polygon points={points.map(xy => xy.join(',')).join(' ')} />
+  )
 
 }

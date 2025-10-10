@@ -1,4 +1,8 @@
-.container :global(rect) {
+.container {
+  pointer-events: none;
+}
+
+.container :global(:is(rect, ellipse, polygon, path)) {
   fill: none;
   stroke: oklch(74% 0.238 322.16);
   stroke-width: 3px;

@@ -1,4 +1,4 @@
-import { ImageAnnotation } from '@annotorious/annotorious';
+import type { EllipseGeometry, ImageAnnotation } from '@annotorious/annotorious';
 
 interface SvgEmphasisEllipseProps {
 
@@ -8,6 +8,15 @@ interface SvgEmphasisEllipseProps {
 
 export const SvgEmphasisEllipse = (props: SvgEmphasisEllipseProps) => {
 
-  return null;
+  const { cx, cy, rx, ry } = props.annotation.target.selector.geometry as EllipseGeometry;
+
+  return (
+    <ellipse
+      data-id={props.annotation.id}
+      cx={cx} 
+      cy={cy} 
+      rx={rx}
+      ry={ry} />
+  )
 
 }

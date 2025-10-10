@@ -11,13 +11,12 @@ export const SvgEmphasisRectangle = (props: SvgEmphasisRectangleProps) => {
   const { x, y, w, h } = props.annotation.target.selector.geometry as RectangleGeometry;
 
   return (
-    <g class="a9s-annotation-emphasis" data-id={props.annotation.id}>
-      <rect
-        x={x} 
-        y={y} 
-        width={w} 
-        height={h} />
-    </g>
+    <rect
+      data-id={props.annotation.id}
+      x={x} 
+      y={y} 
+      width={w} 
+      height={h} />
   )
 
 }
