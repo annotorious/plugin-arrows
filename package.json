@@ -1,6 +1,6 @@
 {
   "name": "@annotorious/plugin-arrows-monorepo",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Connecting annotations with arrows",
   "author": "Rainer Simon",
     "repository": {
