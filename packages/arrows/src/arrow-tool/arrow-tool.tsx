@@ -1,4 +1,4 @@
-import { createSignal, onCleanup, onMount } from 'solid-js';
+import { createSignal, onCleanup, onMount, Show } from 'solid-js';
 import { v4 as uuidv4 } from 'uuid';
 import type { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
 import { Arrow, ArrowAnchor, Point } from '@/types';
@@ -116,11 +116,11 @@ export const ArrowTool = (props: ArrowToolProps) => {
 
   return (
     <g class="a9s-arrow a9s-arrow-tool">
-      {props.hovered && (
+      <Show when={props.hovered}>
         <SvgEmphasis 
           annotation={props.hovered} 
           style="start" />
-      )}
+      </Show>
       
       {start() && cursor() && (
         <SvgArrow 
