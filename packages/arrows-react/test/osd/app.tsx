@@ -64,8 +64,6 @@ export const App = () => {
 
   const [tool, setTool] = useState<'move' | 'annotate' | 'arrows'>('move');
 
-  const [arrowsEnabled, setArrowsEnabled] = useState(false);
-
   const [arrowMode, setArrowMode] = useState<'select' | 'draw'>('select');
 
   const [options, setOptions] = useState<OpenSeadragon.Options>(INITIAL_OPTIONS); 
@@ -89,7 +87,6 @@ export const App = () => {
     if (!anno) return;
 
     anno.setDrawingEnabled(tool === 'annotate');
-    setArrowsEnabled(tool === 'arrows');
   }, [anno, tool]);
 
   const onCreateArrow = () => setArrowMode('select');
@@ -115,7 +112,7 @@ export const App = () => {
           options={options} />
 
         <OSDArrowsPlugin 
-          enabled={arrowsEnabled} 
+          enabled={true} 
           mode={arrowMode} 
           onCreate={onCreateArrow} 
           onSelect={onSelectArrow} />

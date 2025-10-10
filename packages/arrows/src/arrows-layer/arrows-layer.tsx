@@ -34,9 +34,9 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
 
   let svgRef: SVGSVGElement | undefined;
 
-  const [enabled, setEnabled] = createSignal(false);
+  const [enabled, setEnabled] = createSignal(true);
 
-  const [mode, setMode] = createSignal<ArrowsPluginMode>('draw');
+  const [mode, setMode] = createSignal<ArrowsPluginMode>('select');
 
   const [hovered, setHovered] = createSignal<ImageAnnotation | undefined>();
 

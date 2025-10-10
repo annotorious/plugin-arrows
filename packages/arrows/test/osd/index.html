@@ -54,7 +54,7 @@
       <main>
         <div class="buttons">
           <button id="tool">Move</button>
-          <button id="arrow-mode" disabled>Draw</button>
+          <button id="arrow-mode" disabled>Select</button>
         </div>
 
         <div id="openseadragon"></div>
@@ -111,6 +111,8 @@
         });
 
         const arrowsPlugin = mountOSDPlugin(anno, viewer);
+        arrowsPlugin.setEnabled(true);
+        arrowsPlugin.setMode('select');
 
         const arrowModeBtn = document.getElementById('arrow-mode');
           arrowModeBtn.addEventListener('click', () => {
@@ -124,7 +126,6 @@
         });
 
         arrowsPlugin.on('createArrow', a => { 
-          console.log(a);
           arrowsPlugin.setMode('select');
           arrowModeBtn.innerText = 'Select';
         });
@@ -139,12 +140,12 @@
             toolBtn.innerText = 'Arrows';
             anno.setDrawingEnabled(false);
             arrowModeBtn.disabled = false;
-            arrowsPlugin.setEnabled(true);
+            // arrowsPlugin.setEnabled(true);
           } else {
             toolBtn.innerText = 'Move';
             arrowModeBtn.disabled = true;
             anno.setDrawingEnabled(false);
-            arrowsPlugin.setEnabled(false);
+            // arrowsPlugin.setEnabled(false);
           }
         });
       }
