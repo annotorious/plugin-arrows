@@ -1,8 +1,12 @@
 import { getArrow } from 'perfect-arrows';
 import { createMemo, createSignal } from 'solid-js';
-import { Arrow, Point } from '@/types';
+import { Arrow, ArrowAnchor, isArrowAnchor, Point } from '@/types';
+import type { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
+import { useAnchorPoint } from '@/hooks';
 
 interface ArrowEditorProps {
+
+  annoStore: ImageAnnotationStore<ImageAnnotation>;
 
   arrow: Arrow;
 
@@ -22,9 +26,12 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
 
   const [editedArrow, setEditedArrow] = createSignal<Arrow>(props.arrow);
 
+  const startPoint = useAnchorPoint(props.annoStore, () => editedArrow().start);
+  const endPoint = useAnchorPoint(props.annoStore, () => editedArrow().end);
+
   const arrowData = createMemo(() => {
-    const { x: x0, y: y0 } = editedArrow().start;
-    const { x: x1, y: y1 } = editedArrow().end;
+    const { x: x0, y: y0 } = startPoint();
+    const { x: x1, y: y1 } = endPoint();
 
     return getArrow(x0, y0, x1, y1, {
       stretch: 0.25,
@@ -70,7 +77,17 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
       const pt = props.transform({ x: evt.offsetX, y: evt.offsetY });
       const delta = { x: pt.x - origin.x, y: pt.y - origin.y };
 
-      const add = (a: Point, b: Point) => ({ x: a.x + b.x, y: a.y + b.y });
+      const add = (anchor: Point | ArrowAnchor, delta: Point) => {
+        if (isArrowAnchor(anchor)) {
+          const { annotationId, offset } = anchor;
+          return { 
+            annotationId, 
+            offset: { x: offset.x + delta.x, y: offset.y + delta.y }
+          } as ArrowAnchor;
+        } else {
+          return { x: anchor.x + delta.x, y: anchor.y + delta.y };
+        }
+      }
 
       const start = (grabbedHandle === 'arrow' ||  grabbedHandle ==='start')
         ? add(props.arrow.start, delta) : props.arrow.start;
@@ -86,7 +103,7 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
     <g 
       class="a9s-arrow a9s-arrow-editor"
       onPointerUp={onRelease} 
-      onPointerMove={onPointerMove} >
+      onPointerMove={onPointerMove}>
       <path 
         class="a9s-arrow-buffer" 
         d={d()} 

@@ -1,13 +1,18 @@
-import { getArrow } from 'perfect-arrows';
 import { createMemo } from 'solid-js';
+import { getArrow } from 'perfect-arrows';
 import { clsx } from 'clsx';
 import { Point } from 'dist/types';
+import { ArrowAnchor } from '@/types';
+import { useAnchorPoint } from '@/hooks/use-annotations';
+import type { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
 
 interface SvgArrowProps {
-  
-  start: Point;
 
-  end: Point;
+  annoStore: ImageAnnotationStore<ImageAnnotation>;
+  
+  start: Point | ArrowAnchor;
+
+  end: Point | ArrowAnchor;
 
   class?: string;
 
@@ -19,9 +24,13 @@ interface SvgArrowProps {
 
 export const SvgArrow = (props: SvgArrowProps) => {
 
+  const startPoint = useAnchorPoint(props.annoStore, () => props.start);
+  const endPoint = useAnchorPoint(props.annoStore, () => props.end);
+  
   const arrowData = createMemo(() => {
-    const { x: x0, y: y0 } = props.start;
-    const { x: x1, y: y1 } = props.end;
+    const { x: x0, y: y0 } = startPoint();
+    const { x: x1, y: y1 } = endPoint();
+    
     return getArrow(x0, y0, x1, y1, {
       stretch: 0.25,
       stretchMax: Infinity,

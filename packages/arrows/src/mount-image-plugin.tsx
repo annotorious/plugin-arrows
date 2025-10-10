@@ -1,5 +1,5 @@
 import { render } from 'solid-js/web';
-import type { ImageAnnotation, ImageAnnotator } from '@annotorious/annotorious';
+import type { ImageAnnotation, ImageAnnotationStore, ImageAnnotator } from '@annotorious/annotorious';
 import { ImageArrowsLayer, ArrowsLayerAPI } from './arrows-layer';
 import { createArrowStore, createArrowSelection } from './state';
 import { ArrowsPluginInstance, ArrowsPluginMode } from './types';
@@ -16,6 +16,7 @@ export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsP
 
   const dispose = render(() => 
     <ImageArrowsLayer 
+      annoStore={anno.state.store as ImageAnnotationStore<ImageAnnotation>}
       state={state}
       onInit={api => componentAPI = api} />
   , anno.element);

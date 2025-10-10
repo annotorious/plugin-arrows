@@ -1,6 +1,28 @@
 import { ArrowSelection, ArrowStore } from './state';
 import { ArrowStoreEvents } from './state';
 
+export interface Arrow {
+
+  id: string;
+
+  start: Point | ArrowAnchor;
+
+  end: Point | ArrowAnchor;
+
+}
+
+export interface ArrowAnchor {
+  
+  annotationId: string;
+
+  offset: Point;
+
+} 
+
+export const isArrowAnchor = (value: Point | ArrowAnchor): value is ArrowAnchor => {
+  return 'annotationId' in value;
+}
+
 export type ArrowsPluginMode = 'draw' | 'select';
 
 export interface ArrowsPluginInstance {
@@ -28,15 +50,5 @@ export interface Point {
   x: number;
 
   y: number;
-
-}
-
-export interface Arrow {
-
-  id: string;
-
-  start: Point;
-
-  end: Point;
 
 }

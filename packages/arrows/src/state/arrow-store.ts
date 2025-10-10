@@ -1,5 +1,5 @@
 import { atom } from 'nanostores';
-import { createNanoEvents, type Unsubscribe } from 'nanoevents';
+import { createNanoEvents } from 'nanoevents';
 import { Arrow } from '@/types';
 import { ArrowStoreEvents } from './arrow-store-events';
 
