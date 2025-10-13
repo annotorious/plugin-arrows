@@ -65,6 +65,8 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
   }
 
   const onPointerMove = (evt: PointerEvent) => {
+    if (mode() === 'select') return;
+
     const pt = props.elementToImage(svgRef)({ x: evt.offsetX, y: evt.offsetY });
     const hovered = props.annoStore.getAt(pt.x, pt.y);
     setHovered(hovered);
@@ -73,6 +75,11 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
   createEffect(() => {
     if (!enabled()) selection.clearSelection();
   });
+
+  const onCreateArrow = (arrow: Arrow) => {
+    store.addArrow(arrow);
+    setHovered(undefined);
+  }
 
   return (
     <svg 
@@ -94,7 +101,7 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
             hovered={hovered()}
             transform={props.elementToImage(svgRef)} 
             viewportScale={props.scale}
-            onCreateArrow={store.addArrow} />
+            onCreateArrow={onCreateArrow} />
         )}
 
         {arrows().map(arrow => arrow.id === selected() ? (
