@@ -59,8 +59,13 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
 
   const setMode = (mode: ArrowsPluginMode) => {
     componentAPI?.setMode(mode);
-    if (componentAPI?.isEnabled)
+
+    if (componentAPI?.isEnabled) {
       viewer.setMouseNavEnabled(mode === 'select');
+
+      if (mode === 'draw')
+        anno.cancelSelected();
+    }
   }
   
   const unmount = () => {

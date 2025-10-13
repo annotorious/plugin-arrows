@@ -1,7 +1,7 @@
 import { createSignal, onCleanup, onMount, Show } from 'solid-js';
 import { v4 as uuidv4 } from 'uuid';
 import type { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
-import { Arrow, ArrowAnchor, Point } from '@/types';
+import { ArrowAnnotation, ArrowAnchor, Point } from '@/types';
 import { SvgArrow } from '@/arrows-layer/svg-arrow';
 import { SvgEmphasis } from './svg-emphasis';
 
@@ -17,7 +17,7 @@ interface ArrowToolProps {
 
   viewportScale?: number;
 
-  onCreateArrow(arrow: Arrow): void;
+  onCreateArrow(arrow: ArrowAnnotation): void;
 
 }
 
@@ -33,7 +33,7 @@ export const ArrowTool = (props: ArrowToolProps) => {
 
   let lastPointerDown: number | null = null;
   
-  const createArrow = (start: Point, end: Point): Arrow => {
+  const createArrow = (start: Point, end: Point): ArrowAnnotation => {
 
     const getAnchor = (pt: Point, annotation?: ImageAnnotation): Point | ArrowAnchor => {
       if (!annotation) return pt;
@@ -50,10 +50,20 @@ export const ArrowTool = (props: ArrowToolProps) => {
         offset: { x: offsetX, y: offsetY }
       };
     }
+
+    const id = uuidv4();
+
     return {
-      id: uuidv4(),
-      start: getAnchor(start, startAnnotation()), 
-      end: getAnchor(end, props.hovered)
+      id,
+      motivation: 'pointing',
+      bodies: [],
+      target: {
+        annotation: id,
+        selector: {
+          start: getAnchor(start, startAnnotation()), 
+          end: getAnchor(end, props.hovered)
+        }
+      }
     }
   }
 

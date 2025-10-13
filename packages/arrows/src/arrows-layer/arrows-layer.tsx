@@ -4,7 +4,7 @@ import { useStore } from '@nanostores/solid';
 import { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
 import { ArrowEditor } from '@/arrow-editor';
 import { ArrowTool } from '@/arrow-tool';
-import { Arrow, ArrowsPluginMode, ArrowState, Point } from '@/types';
+import { ArrowAnnotation, ArrowsPluginMode, ArrowState, Point } from '@/types';
 import { ArrowsLayerAPI } from './arrows-layer-api';
 import { SvgArrow } from './svg-arrow';
 
@@ -54,7 +54,7 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
     setMode
   });
 
-  const onClickedArrow = (arrow: Arrow) => selection.setSelected(arrow);
+  const onClickedArrow = (arrow: ArrowAnnotation) => selection.setSelected(arrow);
 
   const onPointerUp = (evt: PointerEvent) => {
     if (!enabled() || mode() === 'draw') return;
@@ -76,7 +76,7 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
     if (!enabled()) selection.clearSelection();
   });
 
-  const onCreateArrow = (arrow: Arrow) => {
+  const onCreateArrow = (arrow: ArrowAnnotation) => {
     store.addArrow(arrow);
     setHovered(undefined);
   }
@@ -114,8 +114,8 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
         ) : (
           <SvgArrow 
             annoStore={props.annoStore}
-            start={arrow.start} 
-            end={arrow.end} 
+            start={arrow.target.selector.start} 
+            end={arrow.target.selector.end} 
             viewportScale={props.scale} 
             onClick={() => onClickedArrow(arrow)} />
         ))}

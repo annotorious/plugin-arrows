@@ -1,13 +1,13 @@
 import { createNanoEvents } from 'nanoevents';
-import { Arrow } from '@/types';
+import { ArrowAnnotation } from '@/types';
 import { ArrowSelection } from './arrow-selection';
 import { ArrowStore } from './arrow-store';
 
 export interface ArrowLifecycleEvents {
 
-  createArrow(arrow: Arrow): void;
+  createArrow(arrow: ArrowAnnotation): void;
 
-  selectArrow(arrow?: Arrow): void;
+  selectArrow(arrow?: ArrowAnnotation): void;
 
 }
 

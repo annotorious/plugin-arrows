@@ -1,6 +1,6 @@
 import { getArrow } from 'perfect-arrows';
 import { createMemo, createSignal } from 'solid-js';
-import { Arrow, ArrowAnchor, isArrowAnchor, Point } from '@/types';
+import { ArrowAnnotation, ArrowAnchor, isArrowAnchor, Point } from '@/types';
 import type { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
 import { useAnchorPoint } from '@/hooks';
 
@@ -8,13 +8,13 @@ interface ArrowEditorProps {
 
   annoStore: ImageAnnotationStore<ImageAnnotation>;
 
-  arrow: Arrow;
+  arrow: ArrowAnnotation;
 
   transform(pt: Point): Point;
 
   viewportScale?: number;
 
-  onUpdate(arrow: Arrow): void;
+  onUpdate(arrow: ArrowAnnotation): void;
 
 }
 
@@ -24,10 +24,13 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
 
   let origin: Point | null = null;
 
-  const [editedArrow, setEditedArrow] = createSignal<Arrow>(props.arrow);
+  const [editedArrow, setEditedArrow] = createSignal<ArrowAnnotation>(props.arrow);
 
-  const startPoint = useAnchorPoint(props.annoStore, () => editedArrow().start);
-  const endPoint = useAnchorPoint(props.annoStore, () => editedArrow().end);
+  const startPoint = useAnchorPoint(props.annoStore, () => 
+    editedArrow().target.selector.start);
+
+  const endPoint = useAnchorPoint(props.annoStore, () => 
+    editedArrow().target.selector.end);
 
   const arrowData = createMemo(() => {
     const { x: x0, y: y0 } = startPoint();
@@ -89,11 +92,13 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
         }
       }
 
+      const { selector } = props.arrow.target;
+
       const start = (grabbedHandle === 'arrow' ||  grabbedHandle ==='start')
-        ? add(props.arrow.start, delta) : props.arrow.start;
+        ? add(selector.start, delta) : selector.start;
 
       const end = (grabbedHandle === 'arrow' || grabbedHandle === 'end')
-        ? add(props.arrow.end, delta) : props.arrow.end;
+        ? add(selector.end, delta) : selector.end;
 
       setEditedArrow({...props.arrow, start, end });
     }

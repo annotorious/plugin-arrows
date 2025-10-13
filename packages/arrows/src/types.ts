@@ -1,13 +1,24 @@
+import type { Annotation, AnnotationTarget } from '@annotorious/annotorious';
 import { ArrowSelection, ArrowStore } from './state';
 import { ArrowLifecycleEvents } from './state';
 
-export interface Arrow {
+export interface ArrowAnnotation extends Annotation {
 
-  id: string;
+  motivation: 'pointing';
 
-  start: Point | ArrowAnchor;
+  target: ArrowAnnotationTarget;
 
-  end: Point | ArrowAnchor;
+}
+
+export interface ArrowAnnotationTarget extends AnnotationTarget {
+
+  selector: {
+    
+    start: Point | ArrowAnchor;
+
+    end: Point | ArrowAnchor;
+
+  }
 
 }
 
@@ -17,10 +28,7 @@ export interface ArrowAnchor {
 
   offset: Point;
 
-} 
-
-export const isArrowAnchor = (value: Point | ArrowAnchor): value is ArrowAnchor =>
-  value && 'annotationId' in value;
+}
 
 export type ArrowsPluginMode = 'draw' | 'select';
 
@@ -51,3 +59,10 @@ export interface Point {
   y: number;
 
 }
+
+export const isArrowAnnotation = <T extends Annotation>(annotation: T | ArrowAnnotation): annotation is ArrowAnnotation =>
+  (annotation as ArrowAnnotation).motivation !== undefined &&
+  (annotation as ArrowAnnotation).motivation === 'pointing';
+
+export const isArrowAnchor = (value: Point | ArrowAnchor): value is ArrowAnchor =>
+  value && 'annotationId' in value;

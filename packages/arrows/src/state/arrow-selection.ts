@@ -1,12 +1,12 @@
 import { atom } from 'nanostores';
-import { Arrow } from '@/types';
+import { ArrowAnnotation } from '@/types';
 import { ArrowStore } from './arrow-store';
 
 export const createArrowSelection = (store: ArrowStore) => {
 
   const selectedIds = atom<string | null>(null);
 
-  const setSelected = (arrowOrId: string | Arrow) => {
+  const setSelected = (arrowOrId: string | ArrowAnnotation) => {
     const id = typeof arrowOrId === 'string' ? arrowOrId : arrowOrId.id;
     selectedIds.set(id);
   }
