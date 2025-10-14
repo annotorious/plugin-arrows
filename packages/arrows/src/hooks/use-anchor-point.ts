@@ -41,7 +41,7 @@ export const useAnchorPoint = (store: ImageAnnotationStore<AnnotatorInstanceAnno
 
   return createMemo(() => {
     const currentAnchor = anchor();
-    const a = annotation();
+    const a = annotation?.();
     
     if (isArrowAnchor(currentAnchor) && isImageAnnotation(a)){
       const { bounds } = a.target.selector.geometry;

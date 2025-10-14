@@ -36,26 +36,26 @@
           }
         });
 
-        /*
-        arrowsPlugin.on('createArrow', a => { 
-          console.log(a);
-          arrowsPlugin.setMode('select');
-          arrowModeBtn.innerText = 'Select';
+        anno.on('createAnnotation', a => {
+          console.log('created', a);
+          
+          if (a.motivation === 'pointing') {
+            arrowsPlugin.setMode('select');
+            arrowModeBtn.innerText = 'Select';
+          }
         });
-        */
 
-        // arrowsPlugin.on('selectArrow', a => console.log('selected', a));
+        anno.on('updateAnnotation', a => console.log('updated', a));
+        anno.on('selectionChanged', s => console.log('selected', s));
 
         const toolBtn = document.getElementById('tool');
         toolBtn.addEventListener('click', () => {
           if (toolBtn.innerText === 'Annotate') {
             toolBtn.innerText = 'Arrows';
             arrowModeBtn.disabled = false;
-            arrowsPlugin.setEnabled(true);
           } else {
             toolBtn.innerText = 'Annotate';
             arrowModeBtn.disabled = true;
-            arrowsPlugin.setEnabled(false);
           }
         });
       }

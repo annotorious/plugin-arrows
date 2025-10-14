@@ -3,9 +3,6 @@ import OpenSeadragon from 'openseadragon';
 import { ArrowsLayer, ArrowsLayerAPI } from '@/arrows-layer';
 import { AnnotatorInstanceState, Point } from '@/types';
 
-import styles from './osd-arrows-layer.module.css';
-
-
 interface OpenSeadragonArrowsLayerProps {
 
   state: AnnotatorInstanceState;
@@ -97,8 +94,7 @@ export const OpenSeadragonArrowsLayer = (props: OpenSeadragonArrowsLayerProps) =
 
   return (
     <ArrowsLayer
-      addEventListener={addEventListener} 
-      class={styles.container}
+      addEventListener={addEventListener}
       elementToImage={elementToImage}
       scale={scale()}
       state={props.state}

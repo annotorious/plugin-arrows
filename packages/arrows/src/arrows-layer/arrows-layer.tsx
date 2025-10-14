@@ -1,4 +1,4 @@
-import { createEffect, createSignal } from 'solid-js';
+import { createEffect, createSignal, For, Show } from 'solid-js';
 import clsx from 'clsx';
 import { ImageAnnotation } from '@annotorious/annotorious';
 import { ArrowEditor } from '@/arrow-editor';
@@ -38,9 +38,11 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
 
   const [hovered, setHovered] = createSignal<ImageAnnotation | undefined>();
 
-  const { store, selection } = props.state;
+  const { store, selection} = props.state;
 
   const arrows = useArrows(store);
+
+  const selected = useSelection(selection);
 
   props.onInit({
     get isEnabled() {
@@ -101,21 +103,27 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
             onCreateArrow={onCreateArrow} />
         )}
 
-        {arrows().map(arrow => selection.isSelected(arrow) ? (
-          <ArrowEditor 
-            arrow={arrow} 
-            state={props.state}
-            transform={props.elementToImage(svgRef)} 
-            viewportScale={props.scale}
-            onUpdate={store.updateAnnotation} />
-        ) : (
-          <SvgArrow 
-            state={props.state}
-            start={arrow.target.selector.start} 
-            end={arrow.target.selector.end} 
-            viewportScale={props.scale} 
-            onClick={evt => onClickedArrow(arrow, evt)} />
-        ))}
+        <For each={arrows()}>
+          {arrow => (
+            <Show 
+              when={selected().selected?.some(s => s.id === arrow.id)}
+              fallback={
+                <SvgArrow 
+                  state={props.state}
+                  start={arrow.target.selector.start} 
+                  end={arrow.target.selector.end} 
+                  viewportScale={props.scale} 
+                  onClick={evt => onClickedArrow(arrow, evt)} />
+              }>
+              <ArrowEditor 
+                arrow={arrow} 
+                state={props.state}
+                transform={props.elementToImage(svgRef)} 
+                viewportScale={props.scale}
+                onUpdate={store.updateAnnotation} />
+            </Show>
+          )}
+        </For>
       </g>
     </svg>
   )

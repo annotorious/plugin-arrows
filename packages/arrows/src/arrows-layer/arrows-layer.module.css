@@ -7,7 +7,11 @@
   pointer-events: none;
 }
 
-:global(.enabled.draw).container {
+.container:global(.enabled.draw){
+  pointer-events: all;
+}
+
+.container:global(.enabled.select) * {
   pointer-events: all;
 }
 

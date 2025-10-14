@@ -63,9 +63,9 @@ export interface Point {
 
 }
 
-export const isArrowAnnotation = <T extends Annotation>(annotation: T | ArrowAnnotation): annotation is ArrowAnnotation =>
-  (annotation as ArrowAnnotation).motivation !== undefined &&
-  (annotation as ArrowAnnotation).motivation === 'pointing';
+export const isArrowAnnotation = <T extends Annotation>(annotation?: T | ArrowAnnotation): annotation is ArrowAnnotation =>
+  (annotation as ArrowAnnotation)?.motivation !== undefined &&
+  (annotation as ArrowAnnotation)?.motivation === 'pointing';
 
 export const isArrowAnchor = (value: Point | ArrowAnchor): value is ArrowAnchor =>
   value && 'annotationId' in value;

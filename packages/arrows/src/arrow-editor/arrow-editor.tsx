@@ -121,7 +121,7 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
         class="a9s-arrow-base"
         cx={arrowData()[0]} 
         cy={arrowData()[1]} 
-        r={4 * scale()} 
+        r={4 * scale()}
         onPointerDown={onGrab('start')} />
 
       <polygon

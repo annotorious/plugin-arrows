@@ -7,7 +7,8 @@ export const useSelection = (selection: SelectionState<AnnotatorInstanceAnnotati
   const [selected, setSelected] = createSignal<Selection>({ selected: selection.selected });
 
   onMount(() => {
-    const unsubscribeSelection = selection.subscribe(({ selected }) => setSelected(selected));
+    const unsubscribeSelection = selection.subscribe(selection =>
+      setSelected(selection));
 
     onCleanup(() => {
       unsubscribeSelection();
