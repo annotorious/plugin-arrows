@@ -1,4 +1,4 @@
-import type { Annotation, AnnotationTarget } from '@annotorious/annotorious';
+import type { Annotation, AnnotationTarget, AnnotatorState, ImageAnnotation, ImageAnnotatorState } from '@annotorious/annotorious';
 import { ArrowSelection, ArrowStore } from './state';
 import { ArrowLifecycleEvents } from './state';
 
@@ -30,11 +30,14 @@ export interface ArrowAnchor {
 
 }
 
+// Arrow use the generic Annotorious state for their own state management
+export type AnnotatorInstanceAnnotation = ImageAnnotation | ArrowAnnotation;
+
+export type AnnotatorInstanceState = ImageAnnotatorState<AnnotatorInstanceAnnotation>; 
+
 export type ArrowsPluginMode = 'draw' | 'select';
 
 export interface ArrowsPluginInstance {
-
-  on<T extends keyof ArrowLifecycleEvents>(event: T, callback: ArrowLifecycleEvents[T]): void;
 
   setEnabled(enabled: boolean): void;
 

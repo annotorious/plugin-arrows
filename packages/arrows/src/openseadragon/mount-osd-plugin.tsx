@@ -4,7 +4,7 @@ import type { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotor
 import { OpenSeadragonAnnotator } from '@annotorious/openseadragon';
 import { ArrowsLayerAPI } from '@/arrows-layer';
 import { createArrowSelection, createArrowStore, createLifecycleObserver } from '@/state';
-import { ArrowsPluginInstance, ArrowsPluginMode } from '@/types';
+import { AnnotatorInstanceState, ArrowsPluginInstance, ArrowsPluginMode } from '@/types';
 import { OpenSeadragonArrowsLayer } from './osd-arrows-layer';
 
 export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadragon.Viewer): ArrowsPluginInstance => {
@@ -15,7 +15,7 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
 
   const lifecycle = createLifecycleObserver(store, selection);
 
-  const state = { store, selection };
+  const state = anno.state as AnnotatorInstanceState;
   
   let componentAPI: ArrowsLayerAPI |  null = null;
 
@@ -34,7 +34,6 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
 
       dispose = render(() => (
         <OpenSeadragonArrowsLayer 
-          annoStore={anno.state.store as ImageAnnotationStore<ImageAnnotation>}
           onInit={api => componentAPI = api} 
           state={state}
           viewer={viewer} />

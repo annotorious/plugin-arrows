@@ -1,13 +1,10 @@
-import { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
-import { ArrowState, Point } from '@/types';
+import { AnnotatorInstanceState, Point } from '@/types';
 import { ArrowsLayerAPI } from './arrows-layer-api';
 import { ArrowsLayer } from './arrows-layer';
 
 interface ImageArrowsLayerProps {
 
-  annoStore: ImageAnnotationStore<ImageAnnotation>;
-
-  state: ArrowState;
+  state: AnnotatorInstanceState;
 
   onInit(api: ArrowsLayerAPI): void;
 
@@ -35,8 +32,7 @@ export const ImageArrowsLayer = (props: ImageArrowsLayerProps) => {
 
   return (
     <ArrowsLayer
-      addEventListener={addEventListener}    
-      annoStore={props.annoStore}  
+      addEventListener={addEventListener}
       elementToImage={elementToImage}
       state={props.state}
       onInit={props.onInit} />

@@ -2,13 +2,12 @@ import { createMemo } from 'solid-js';
 import { getArrow } from 'perfect-arrows';
 import { clsx } from 'clsx';
 import { Point } from 'dist/types';
-import { ArrowAnchor } from '@/types';
-import { useAnchorPoint } from '@/hooks/use-annotations';
-import type { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
+import { AnnotatorInstanceState, ArrowAnchor } from '@/types';
+import { useAnchorPoint } from '@/hooks/use-anchor-point';
 
 interface SvgArrowProps {
 
-  annoStore: ImageAnnotationStore<ImageAnnotation>;
+  state: AnnotatorInstanceState;
   
   start: Point | ArrowAnchor;
 
@@ -18,14 +17,14 @@ interface SvgArrowProps {
 
   viewportScale?: number;
 
-  onClick?(): void;
+  onClick?(evt: MouseEvent): void;
 
 }
 
 export const SvgArrow = (props: SvgArrowProps) => {
 
-  const startPoint = useAnchorPoint(props.annoStore, () => props.start);
-  const endPoint = useAnchorPoint(props.annoStore, () => props.end);
+  const startPoint = useAnchorPoint(props.state.store, () => props.start);
+  const endPoint = useAnchorPoint(props.state.store, () => props.end);
   
   const arrowData = createMemo(() => {
     const { x: x0, y: y0 } = startPoint();

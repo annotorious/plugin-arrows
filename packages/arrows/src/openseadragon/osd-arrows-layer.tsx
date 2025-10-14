@@ -1,17 +1,14 @@
 import { createSignal, onCleanup, onMount } from 'solid-js';
 import OpenSeadragon from 'openseadragon';
-import type { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
 import { ArrowsLayer, ArrowsLayerAPI } from '@/arrows-layer';
-import { ArrowState, Point } from '@/types';
+import { AnnotatorInstanceState, Point } from '@/types';
 
 import styles from './osd-arrows-layer.module.css';
 
 
 interface OpenSeadragonArrowsLayerProps {
 
-  annoStore: ImageAnnotationStore<ImageAnnotation>;
-
-  state: ArrowState;
+  state: AnnotatorInstanceState;
 
   viewer: OpenSeadragon.Viewer;
 
@@ -86,7 +83,7 @@ export const OpenSeadragonArrowsLayer = (props: OpenSeadragonArrowsLayerProps) =
   }
 
   const onCanvasClick = () =>
-    props.state.selection.clearSelection();
+    props.state.selection.clear();
 
   onMount(() => {
     props.viewer.addHandler('canvas-click', onCanvasClick);
@@ -101,7 +98,6 @@ export const OpenSeadragonArrowsLayer = (props: OpenSeadragonArrowsLayerProps) =
   return (
     <ArrowsLayer
       addEventListener={addEventListener} 
-      annoStore={props.annoStore}
       class={styles.container}
       elementToImage={elementToImage}
       scale={scale()}

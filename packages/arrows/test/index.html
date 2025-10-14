@@ -9,7 +9,7 @@
     <div id="content">
       <div>
         <button id="tool">Annotate</button>
-        <button id="arrow-mode" disabled>Draw</button>
+        <button id="arrow-mode" disabled>Select</button>
       </div>
       <img id="sample-image" src="640px-Hallstatt.jpg" />
     </div>
@@ -36,13 +36,15 @@
           }
         });
 
+        /*
         arrowsPlugin.on('createArrow', a => { 
           console.log(a);
           arrowsPlugin.setMode('select');
           arrowModeBtn.innerText = 'Select';
         });
+        */
 
-        arrowsPlugin.on('selectArrow', a => console.log('selected', a));
+        // arrowsPlugin.on('selectArrow', a => console.log('selected', a));
 
         const toolBtn = document.getElementById('tool');
         toolBtn.addEventListener('click', () => {

@@ -1,14 +1,13 @@
 import { getArrow } from 'perfect-arrows';
 import { createMemo, createSignal } from 'solid-js';
-import { ArrowAnnotation, ArrowAnchor, isArrowAnchor, Point } from '@/types';
-import type { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
+import { ArrowAnnotation, ArrowAnchor, isArrowAnchor, Point, AnnotatorInstanceState } from '@/types';
 import { useAnchorPoint } from '@/hooks';
 
 interface ArrowEditorProps {
 
-  annoStore: ImageAnnotationStore<ImageAnnotation>;
-
   arrow: ArrowAnnotation;
+
+  state: AnnotatorInstanceState;
 
   transform(pt: Point): Point;
 
@@ -26,10 +25,10 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
 
   const [editedArrow, setEditedArrow] = createSignal<ArrowAnnotation>(props.arrow);
 
-  const startPoint = useAnchorPoint(props.annoStore, () => 
+  const startPoint = useAnchorPoint(props.state.store, () => 
     editedArrow().target.selector.start);
 
-  const endPoint = useAnchorPoint(props.annoStore, () => 
+  const endPoint = useAnchorPoint(props.state.store, () => 
     editedArrow().target.selector.end);
 
   const arrowData = createMemo(() => {

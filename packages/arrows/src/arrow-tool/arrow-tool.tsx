@@ -1,7 +1,7 @@
 import { createSignal, onCleanup, onMount, Show } from 'solid-js';
 import { v4 as uuidv4 } from 'uuid';
-import type { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
-import { ArrowAnnotation, ArrowAnchor, Point } from '@/types';
+import type { ImageAnnotation } from '@annotorious/annotorious';
+import { ArrowAnnotation, ArrowAnchor, Point, AnnotatorInstanceState } from '@/types';
 import { SvgArrow } from '@/arrows-layer/svg-arrow';
 import { SvgEmphasis } from './svg-emphasis';
 
@@ -9,7 +9,7 @@ interface ArrowToolProps {
 
   addEventListener(name: keyof SVGSVGElementEventMap, handler: (evt: Event) => void, capture?: boolean): () => void;
 
-  annoStore: ImageAnnotationStore<ImageAnnotation>;
+  state: AnnotatorInstanceState;
 
   hovered?: ImageAnnotation;
 
@@ -134,7 +134,7 @@ export const ArrowTool = (props: ArrowToolProps) => {
       
       {start() && cursor() && (
         <SvgArrow 
-          annoStore={props.annoStore}
+          state={props.state}
           start={start()} 
           end={cursor()} 
           viewportScale={props.viewportScale} />

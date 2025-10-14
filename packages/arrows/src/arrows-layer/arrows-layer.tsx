@@ -1,10 +1,10 @@
 import { createEffect, createSignal } from 'solid-js';
 import clsx from 'clsx';
-import { useStore } from '@nanostores/solid';
-import { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
+import { ImageAnnotation } from '@annotorious/annotorious';
 import { ArrowEditor } from '@/arrow-editor';
 import { ArrowTool } from '@/arrow-tool';
-import { ArrowAnnotation, ArrowsPluginMode, ArrowState, Point } from '@/types';
+import { useArrows, useSelection } from '@/hooks';
+import { AnnotatorInstanceState, ArrowAnnotation, ArrowsPluginMode, isArrowAnnotation, Point } from '@/types';
 import { ArrowsLayerAPI } from './arrows-layer-api';
 import { SvgArrow } from './svg-arrow';
 
@@ -14,15 +14,13 @@ export interface ArrowsLayerProps {
 
   addEventListener(svg?: SVGSVGElement): (name: keyof SVGSVGElementEventMap, handler: (evt: Event) => void, capture?: boolean) => () => void;
 
-  annoStore: ImageAnnotationStore<ImageAnnotation>;
+  state: AnnotatorInstanceState;
 
   class?: string;
 
   elementToImage(svg?: SVGSVGElement): (pt: Point) => Point;
 
   scale?: number;
-
-  state: ArrowState;
 
   transform?: string;
   
@@ -42,9 +40,7 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
 
   const { store, selection } = props.state;
 
-  const arrows = useStore(store.arrows);
-
-  const selected = useStore(selection.selectedIds);
+  const arrows = useArrows(store);
 
   props.onInit({
     get isEnabled() {
@@ -54,30 +50,31 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
     setMode
   });
 
-  const onClickedArrow = (arrow: ArrowAnnotation) => selection.setSelected(arrow);
+  const onClickedArrow = (arrow: ArrowAnnotation, evt: MouseEvent) => 
+    selection.userSelect(arrow.id, evt as PointerEvent);
 
   const onPointerUp = (evt: PointerEvent) => {
     if (!enabled() || mode() === 'draw') return;
 
     if (evt.target !== svgRef) return;
-
-    selection.clearSelection();
   }
 
   const onPointerMove = (evt: PointerEvent) => {
     if (mode() === 'select') return;
 
     const pt = props.elementToImage(svgRef)({ x: evt.offsetX, y: evt.offsetY });
-    const hovered = props.annoStore.getAt(pt.x, pt.y);
-    setHovered(hovered);
+    const hovered = store.getAt(pt.x, pt.y);
+
+    if (!isArrowAnnotation(hovered))
+      setHovered(hovered);
   }
 
   createEffect(() => {
-    if (!enabled()) selection.clearSelection();
+    if (mode() === 'draw') selection.clear();
   });
 
   const onCreateArrow = (arrow: ArrowAnnotation) => {
-    store.addArrow(arrow);
+    store.addAnnotation(arrow);
     setHovered(undefined);
   }
 
@@ -95,29 +92,29 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
       onPointerMove={onPointerMove}>
       <g transform={props.transform}>
         {mode() === 'draw' && (
-          <ArrowTool 
-            annoStore={props.annoStore}
+          <ArrowTool
             addEventListener={props.addEventListener(svgRef)}
             hovered={hovered()}
+            state={props.state}
             transform={props.elementToImage(svgRef)} 
             viewportScale={props.scale}
             onCreateArrow={onCreateArrow} />
         )}
 
-        {arrows().map(arrow => arrow.id === selected() ? (
+        {arrows().map(arrow => selection.isSelected(arrow) ? (
           <ArrowEditor 
-            annoStore={props.annoStore}
             arrow={arrow} 
+            state={props.state}
             transform={props.elementToImage(svgRef)} 
             viewportScale={props.scale}
-            onUpdate={store.updateArrow} />
+            onUpdate={store.updateAnnotation} />
         ) : (
           <SvgArrow 
-            annoStore={props.annoStore}
+            state={props.state}
             start={arrow.target.selector.start} 
             end={arrow.target.selector.end} 
             viewportScale={props.scale} 
-            onClick={() => onClickedArrow(arrow)} />
+            onClick={evt => onClickedArrow(arrow, evt)} />
         ))}
       </g>
     </svg>

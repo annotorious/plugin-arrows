@@ -1,11 +1,12 @@
 import { createMemo, createSignal, onCleanup, onMount } from 'solid-js';
+import { isImageAnnotation } from '@annotorious/annotorious';
 import type { ImageAnnotation, ImageAnnotationStore, StoreChangeEvent } from '@annotorious/annotorious';
 import { isArrowAnchor } from '@/types';
-import type { ArrowAnchor, Point } from '@/types';
+import type { AnnotatorInstanceAnnotation, ArrowAnchor, Point } from '@/types';
 
-export const useAnnotation = (store: ImageAnnotationStore<ImageAnnotation>, id: string) => {
+const useAnnotation = (store: ImageAnnotationStore<AnnotatorInstanceAnnotation>, id: string) => {
 
-  const [annotation, setAnnotation] = createSignal<ImageAnnotation | null>(store.getAnnotation(id));
+  const [annotation, setAnnotation] = createSignal<AnnotatorInstanceAnnotation | null>(store.getAnnotation(id));
 
   onMount(() => {
     const onStoreChange = ((event: StoreChangeEvent<ImageAnnotation>) => {
@@ -34,15 +35,16 @@ export const useAnnotation = (store: ImageAnnotationStore<ImageAnnotation>, id: 
 
 }
 
-export const useAnchorPoint = (store: ImageAnnotationStore<ImageAnnotation>, anchor: () => Point | ArrowAnchor) => {
+export const useAnchorPoint = (store: ImageAnnotationStore<AnnotatorInstanceAnnotation>, anchor: () => Point | ArrowAnchor) => {
 
   const annotation = isArrowAnchor(anchor()) ? useAnnotation(store, (anchor() as ArrowAnchor).annotationId) : null;
 
   return createMemo(() => {
     const currentAnchor = anchor();
+    const a = annotation();
     
-    if (isArrowAnchor(currentAnchor) && annotation) {
-      const { bounds } = annotation().target.selector.geometry;
+    if (isArrowAnchor(currentAnchor) && isImageAnnotation(a)){
+      const { bounds } = a.target.selector.geometry;
       
       const cx = (bounds.maxX + bounds.minX) / 2;
       const cy = (bounds.maxY + bounds.minY) / 2;

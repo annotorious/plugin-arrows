@@ -1,34 +1,24 @@
 import { render } from 'solid-js/web';
-import type { ImageAnnotation, ImageAnnotationStore, ImageAnnotator } from '@annotorious/annotorious';
+import type { ImageAnnotation, ImageAnnotator } from '@annotorious/annotorious';
 import { ImageArrowsLayer, ArrowsLayerAPI } from './arrows-layer';
-import { createArrowStore, createArrowSelection, createLifecycleObserver } from './state';
-import { ArrowsPluginInstance, ArrowsPluginMode } from './types';
+import { AnnotatorInstanceState, ArrowsPluginInstance, ArrowsPluginMode } from './types';
 
 export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsPluginInstance => {
 
-  const store = createArrowStore();
-
-  const selection = createArrowSelection(store);
-
-  const lifecycle = createLifecycleObserver(store, selection);
-
-  const state = { store, selection };
+  const state = anno.state as AnnotatorInstanceState;
 
   let componentAPI: ArrowsLayerAPI |  null = null;
 
   const dispose = render(() => 
     <ImageArrowsLayer 
-      annoStore={anno.state.store as ImageAnnotationStore<ImageAnnotation>}
       state={state}
       onInit={api => componentAPI = api} />
   , anno.element);
 
   /** API **/
 
-  const setEnabled = (enabled: boolean) => {
-    anno.cancelSelected();
+  const setEnabled = (enabled: boolean) =>
     componentAPI?.setEnabled(enabled);
-  }
 
   const setMode = (mode: ArrowsPluginMode) =>
     componentAPI?.setMode(mode);
@@ -37,8 +27,7 @@ export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsP
     dispose();
   }
 
-  return { 
-    on: lifecycle.on,
+  return {
     setEnabled,
     setMode,
     unmount
