@@ -1,0 +1,80 @@
+[
+  {
+    "id": "617d04b3-1f49-4b65-b684-5e64d90f10be",
+    "bodies": [],
+    "target": {
+      "annotation": "617d04b3-1f49-4b65-b684-5e64d90f10be",
+      "selector": {
+        "type": "RECTANGLE",
+        "geometry": {
+          "bounds": {
+            "minX": 176.66796875,
+            "minY": 15.03125,
+            "maxX": 246.5390625,
+            "maxY": 307.44921875
+          },
+          "x": 176.66796875,
+          "y": 15.03125,
+          "w": 69.87109375,
+          "h": 292.41796875
+        }
+      },
+      "creator": {
+        "isGuest": true,
+        "id": "Au1sVN3zFed5kzoKFLQx"
+      },
+      "created": "2025-10-14T08:51:29.741Z"
+    }
+  },
+  {
+    "id": "e4309c1c-7481-4554-88a3-9ae42166ea5e",
+    "bodies": [],
+    "target": {
+      "annotation": "e4309c1c-7481-4554-88a3-9ae42166ea5e",
+      "selector": {
+        "type": "RECTANGLE",
+        "geometry": {
+          "bounds": {
+            "minX": 278.80078125,
+            "minY": 175.9453125,
+            "maxX": 391.57421875,
+            "maxY": 263.71875
+          },
+          "x": 278.80078125,
+          "y": 175.9453125,
+          "w": 112.7734375,
+          "h": 87.7734375
+        }
+      },
+      "creator": {
+        "isGuest": true,
+        "id": "Au1sVN3zFed5kzoKFLQx"
+      },
+      "created": "2025-10-14T08:51:32.724Z"
+    }
+  },
+  {
+    "id": "e5f72b83-bdfc-419e-aa0a-6139a2ff162a",
+    "motivation": "pointing",
+    "bodies": [],
+    "target": {
+      "annotation": "e5f72b83-bdfc-419e-aa0a-6139a2ff162a",
+      "selector": {
+        "start": {
+          "annotationId": "617d04b3-1f49-4b65-b684-5e64d90f10be",
+          "offset": {
+            "x": 0.005859375,
+            "y": -125.369140625
+          }
+        },
+        "end": {
+          "annotationId": "e4309c1c-7481-4554-88a3-9ae42166ea5e",
+          "offset": {
+            "x": -14.26953125,
+            "y": -16.984375
+          }
+        }
+      }
+    }
+  }
+]

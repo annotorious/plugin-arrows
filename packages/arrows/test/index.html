@@ -22,8 +22,9 @@
 
       window.onload = function() {    
         const anno = createImageAnnotator('sample-image');
-
         const arrowsPlugin = mountImagePlugin(anno);
+
+        anno.loadAnnotations('annotations.json');
 
         const arrowModeBtn = document.getElementById('arrow-mode');
         arrowModeBtn.addEventListener('click', () => {
