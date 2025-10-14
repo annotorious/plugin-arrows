@@ -99,7 +99,13 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
       const end = (grabbedHandle === 'arrow' || grabbedHandle === 'end')
         ? add(selector.end, delta) : selector.end;
 
-      setEditedArrow({...props.arrow, start, end });
+      setEditedArrow({
+        ...props.arrow, 
+        target: {
+          ...props.arrow.target,
+          selector: { start, end }
+        }
+      });
     }
   }
 
