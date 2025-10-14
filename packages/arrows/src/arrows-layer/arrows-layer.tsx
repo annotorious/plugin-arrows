@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, Show } from 'solid-js';
+import { createEffect, createSignal, For, Index, Show } from 'solid-js';
 import clsx from 'clsx';
 import { ImageAnnotation } from '@annotorious/annotorious';
 import { ArrowEditor } from '@/arrow-editor';
@@ -103,27 +103,27 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
             onCreateArrow={onCreateArrow} />
         )}
 
-        <For each={arrows()}>
+        <Index each={arrows()}>
           {arrow => (
             <Show 
-              when={selected().selected?.some(s => s.id === arrow.id)}
+              keyed
+              when={selected().selected?.some(s => s.id === arrow().id)}
               fallback={
-                <SvgArrow 
+                <SvgArrow
                   state={props.state}
-                  start={arrow.target.selector.start} 
-                  end={arrow.target.selector.end} 
+                  start={arrow().target.selector.start} 
+                  end={arrow().target.selector.end} 
                   viewportScale={props.scale} 
-                  onClick={evt => onClickedArrow(arrow, evt)} />
+                  onClick={evt => onClickedArrow(arrow(), evt)} />
               }>
               <ArrowEditor 
-                arrow={arrow} 
+                arrow={arrow()} 
                 state={props.state}
                 transform={props.elementToImage(svgRef)} 
-                viewportScale={props.scale}
-                onUpdate={store.updateAnnotation} />
+                viewportScale={props.scale} />
             </Show>
           )}
-        </For>
+        </Index>
       </g>
     </svg>
   )

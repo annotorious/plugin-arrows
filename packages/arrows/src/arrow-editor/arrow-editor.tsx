@@ -1,5 +1,6 @@
 import { getArrow } from 'perfect-arrows';
-import { createMemo, createSignal } from 'solid-js';
+import { createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
+import { Origin } from '@annotorious/core';
 import { ArrowAnnotation, ArrowAnchor, isArrowAnchor, Point, AnnotatorInstanceState } from '@/types';
 import { useAnchorPoint } from '@/hooks';
 
@@ -13,22 +14,24 @@ interface ArrowEditorProps {
 
   viewportScale?: number;
 
-  onUpdate(arrow: ArrowAnnotation): void;
-
 }
 
 export const ArrowEditor = (props: ArrowEditorProps) => {
+
+  const { store } = props.state;
 
   let grabbedHandle: string | null = null;
 
   let origin: Point | null = null;
 
+  let originalArrow: ArrowAnnotation | null = null;
+
   const [editedArrow, setEditedArrow] = createSignal<ArrowAnnotation>(props.arrow);
 
-  const startPoint = useAnchorPoint(props.state.store, () => 
+  const startPoint = useAnchorPoint(store, () => 
     editedArrow().target.selector.start);
 
-  const endPoint = useAnchorPoint(props.state.store, () => 
+  const endPoint = useAnchorPoint(store, () => 
     editedArrow().target.selector.end);
 
   const arrowData = createMemo(() => {
@@ -59,6 +62,7 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
 
     const pt = props.transform({ x: evt.offsetX, y: evt.offsetY });
     origin = pt;
+    originalArrow = props.arrow;
 
     const target = evt.target as Element;
     target.setPointerCapture(evt.pointerId);
@@ -70,12 +74,11 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
 
     grabbedHandle = null;
     origin = null;
-
-    props.onUpdate(editedArrow());
+    originalArrow = null;
   }
 
   const onPointerMove = (evt: PointerEvent) => {
-    if (grabbedHandle && origin) {
+    if (grabbedHandle && origin && originalArrow) {
       const pt = props.transform({ x: evt.offsetX, y: evt.offsetY });
       const delta = { x: pt.x - origin.x, y: pt.y - origin.y };
 
@@ -91,7 +94,7 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
         }
       }
 
-      const { selector } = props.arrow.target;
+      const { selector } = originalArrow.target;
 
       const start = (grabbedHandle === 'arrow' ||  grabbedHandle ==='start')
         ? add(selector.start, delta) : selector.start;
@@ -99,13 +102,16 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
       const end = (grabbedHandle === 'arrow' || grabbedHandle === 'end')
         ? add(selector.end, delta) : selector.end;
 
-      setEditedArrow({
-        ...props.arrow, 
+      const updated = {
+        ...originalArrow, 
         target: {
-          ...props.arrow.target,
+          ...originalArrow.target,
           selector: { start, end }
         }
-      });
+      };
+
+      setEditedArrow(updated);
+      store.updateAnnotation(updated);
     }
   }
 

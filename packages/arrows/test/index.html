@@ -16,6 +16,7 @@
     
     <script type="module">
       import { createImageAnnotator } from '@annotorious/annotorious';
+      import { createStoreSynchronizer } from '@annotorious/plugin-broadcast-channel-sync';
       import { mountImagePlugin } from '../src';
 
       import '@annotorious/annotorious/annotorious.css';
@@ -23,6 +24,13 @@
       window.onload = function() {    
         const anno = createImageAnnotator('sample-image');
         const arrowsPlugin = mountImagePlugin(anno);
+
+        const sync = createStoreSynchronizer(anno.state.store, {
+          channelName: 'my-app-annotations',
+          debug: false // Enable logging during development
+        });
+
+        sync.connect();
 
         anno.loadAnnotations('annotations.json');
 
