@@ -2,7 +2,7 @@ export * from './openseadragon';
 export * from './arrows-plugin';
 
 export type {
-  Arrow,
+  ArrowAnnotation,
   ArrowsPluginInstance,
   ArrowsPluginMode
 } from '@annotorious/plugin-arrows';
