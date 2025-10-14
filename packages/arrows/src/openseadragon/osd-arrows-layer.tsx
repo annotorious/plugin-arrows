@@ -79,15 +79,10 @@ export const OpenSeadragonArrowsLayer = (props: OpenSeadragonArrowsLayerProps) =
     setScale(zoom * containerWidth / props.viewer.world.getContentFactor());
   }
 
-  const onCanvasClick = () =>
-    props.state.selection.clear();
-
   onMount(() => {
-    props.viewer.addHandler('canvas-click', onCanvasClick);
     props.viewer.addHandler('update-viewport', onUpdateViewport);
 
     onCleanup(() => {
-      props.viewer.removeHandler('canvas-click', onCanvasClick);
       props.viewer.removeHandler('update-viewport', onUpdateViewport);
     })
   });

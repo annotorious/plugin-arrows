@@ -1,19 +1,11 @@
 import { render } from 'solid-js/web';
 import OpenSeadragon from 'openseadragon';
-import type { ImageAnnotation, ImageAnnotationStore } from '@annotorious/annotorious';
 import { OpenSeadragonAnnotator } from '@annotorious/openseadragon';
 import { ArrowsLayerAPI } from '@/arrows-layer';
-import { createArrowSelection, createArrowStore, createLifecycleObserver } from '@/state';
 import { AnnotatorInstanceState, ArrowsPluginInstance, ArrowsPluginMode } from '@/types';
 import { OpenSeadragonArrowsLayer } from './osd-arrows-layer';
 
 export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadragon.Viewer): ArrowsPluginInstance => {
-
-  const store = createArrowStore();
-
-  const selection = createArrowSelection(store);
-
-  const lifecycle = createLifecycleObserver(store, selection);
 
   const state = anno.state as AnnotatorInstanceState;
   
@@ -49,31 +41,18 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
 
   /** API **/
 
-  const setEnabled = (enabled: boolean) => {
-    if (enabled && anno.getSelected().length > 0)
-      anno.cancelSelected();
-
+  const setEnabled = (enabled: boolean) =>
     componentAPI?.setEnabled(enabled);
-  }
 
-  const setMode = (mode: ArrowsPluginMode) => {
+  const setMode = (mode: ArrowsPluginMode) =>
     componentAPI?.setMode(mode);
-
-    if (componentAPI?.isEnabled) {
-      viewer.setMouseNavEnabled(mode === 'select');
-
-      if (mode === 'draw')
-        anno.cancelSelected();
-    }
-  }
   
   const unmount = () => {
     wasDisposed = true;
     dispose();
   }
 
-  return { 
-    on: lifecycle.on,
+  return {
     setEnabled,
     setMode,
     unmount
