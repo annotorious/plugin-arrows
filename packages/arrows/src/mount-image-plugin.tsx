@@ -1,11 +1,16 @@
 import { render } from 'solid-js/web';
 import type { ImageAnnotation, ImageAnnotator } from '@annotorious/annotorious';
 import { ImageArrowsLayer, ArrowsLayerAPI } from './arrows-layer';
+import { createConnectionGraph } from './state';
 import { AnnotatorInstanceState, ArrowsPluginInstance, ArrowsPluginMode } from './types';
 
 export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsPluginInstance => {
 
   const state = anno.state as AnnotatorInstanceState;
+
+  // Needed to keep arrows in sync if connected annotations 
+  // are deleted!
+  const graph = createConnectionGraph(state.store);
 
   let componentAPI: ArrowsLayerAPI |  null = null;
 
@@ -24,6 +29,7 @@ export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsP
     componentAPI?.setMode(mode);
   
   const unmount = () => {
+    graph.destroy();
     dispose();
   }
 

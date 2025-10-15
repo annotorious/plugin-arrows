@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import OpenSeadragon from 'openseadragon';
 import { 
   AnnotoriousOpenSeadragonAnnotator, 
   DrawingStyle,
@@ -10,8 +11,6 @@ import { OSDArrowsPlugin } from '../../src';
 
 import '@annotorious/openseadragon/annotorious-openseadragon.css';
 import '@annotorious/plugin-arrows/annotorious-arrows.css';
-import OpenSeadragon from 'openseadragon';
-import { Arrow } from '@annotorious/plugin-arrows';
 
 const IIIF_SAMPLE = {
   "@context" : "http://iiif.io/api/image/2/context.json",
@@ -89,9 +88,6 @@ export const App = () => {
     anno.setDrawingEnabled(tool === 'annotate');
   }, [anno, tool]);
 
-  const onCreateArrow = () => setArrowMode('select');
-  const onSelectArrow = (a?: Arrow) => console.log('select', a);
-
   return (
     <div>
       <div className="buttons">
@@ -113,9 +109,7 @@ export const App = () => {
 
         <OSDArrowsPlugin 
           enabled={true} 
-          mode={arrowMode} 
-          onCreate={onCreateArrow} 
-          onSelect={onSelectArrow} />
+          mode={arrowMode} />
       </OpenSeadragonAnnotator>
     </div>
   )

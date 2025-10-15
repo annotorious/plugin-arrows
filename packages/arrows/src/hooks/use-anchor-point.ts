@@ -1,4 +1,4 @@
-import { createMemo, createSignal, onCleanup, onMount } from 'solid-js';
+import { Accessor, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
 import { isImageAnnotation } from '@annotorious/annotorious';
 import type { ImageAnnotation, ImageAnnotationStore, StoreChangeEvent } from '@annotorious/annotorious';
 import { isArrowAnchor } from '@/types';
@@ -35,27 +35,34 @@ const useAnnotation = (store: ImageAnnotationStore<AnnotatorInstanceAnnotation>,
 
 }
 
-export const useAnchorPoint = (store: ImageAnnotationStore<AnnotatorInstanceAnnotation>, anchor: () => Point | ArrowAnchor) => {
+export const useAnchorPoint = (
+  store: ImageAnnotationStore<AnnotatorInstanceAnnotation>, 
+  anchor: () => Point | ArrowAnchor
+): Accessor<Point | null> => {
 
   const annotation = isArrowAnchor(anchor()) ? useAnnotation(store, (anchor() as ArrowAnchor).annotationId) : null;
 
   return createMemo(() => {
     const currentAnchor = anchor();
     const a = annotation?.();
-    
-    if (isArrowAnchor(currentAnchor) && isImageAnnotation(a)){
-      const { bounds } = a.target.selector.geometry;
-      
-      const cx = (bounds.maxX + bounds.minX) / 2;
-      const cy = (bounds.maxY + bounds.minY) / 2;
 
-      return {
-        x: cx + currentAnchor.offset.x,
-        y: cy + currentAnchor.offset.y
-      };
+    if (isArrowAnchor(currentAnchor)) {
+      if (a && isImageAnnotation(a)) {
+        const { bounds } = a.target.selector.geometry;
+        
+        const cx = (bounds.maxX + bounds.minX) / 2;
+        const cy = (bounds.maxY + bounds.minY) / 2;
+
+        return {
+          x: cx + currentAnchor.offset.x,
+          y: cy + currentAnchor.offset.y
+        }
+      } else {
+        return null;
+      }
+    } else {
+      return anchor() as Point;
     }
-    
-    return currentAnchor as Point;
   });
 
 }

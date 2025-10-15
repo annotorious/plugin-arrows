@@ -1,6 +1,7 @@
 import { render } from 'solid-js/web';
 import OpenSeadragon from 'openseadragon';
 import { OpenSeadragonAnnotator } from '@annotorious/openseadragon';
+import { createConnectionGraph } from '@/state';
 import { ArrowsLayerAPI } from '@/arrows-layer';
 import { AnnotatorInstanceState, ArrowsPluginInstance, ArrowsPluginMode } from '@/types';
 import { OpenSeadragonArrowsLayer } from './osd-arrows-layer';
@@ -8,6 +9,10 @@ import { OpenSeadragonArrowsLayer } from './osd-arrows-layer';
 export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadragon.Viewer): ArrowsPluginInstance => {
 
   const state = anno.state as AnnotatorInstanceState;
+
+  // Needed to keep arrows in sync if connected annotations 
+  // are deleted!
+  const graph = createConnectionGraph(state.store);
   
   let componentAPI: ArrowsLayerAPI |  null = null;
 
@@ -49,6 +54,7 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
   
   const unmount = () => {
     wasDisposed = true;
+    graph.destroy();
     dispose();
   }
 

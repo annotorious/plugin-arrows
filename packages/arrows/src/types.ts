@@ -1,6 +1,9 @@
-import type { Annotation, AnnotationTarget, AnnotatorState, ImageAnnotation, ImageAnnotatorState } from '@annotorious/annotorious';
-import { ArrowSelection, ArrowStore } from './state';
-import { ArrowLifecycleEvents } from './state';
+import type { 
+  Annotation, 
+  AnnotationTarget, 
+  ImageAnnotation, 
+  ImageAnnotatorState 
+} from '@annotorious/annotorious';
 
 export interface ArrowAnnotation extends Annotation {
 
@@ -44,14 +47,6 @@ export interface ArrowsPluginInstance {
   setMode(mode: ArrowsPluginMode): void;
 
   unmount(): void;
-
-}
-
-export interface ArrowState {
-
-  store: ArrowStore;
-
-  selection: ArrowSelection;
 
 }
 

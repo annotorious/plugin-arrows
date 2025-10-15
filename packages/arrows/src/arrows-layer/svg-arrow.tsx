@@ -1,4 +1,4 @@
-import { createMemo } from 'solid-js';
+import { createMemo, Show } from 'solid-js';
 import { getArrow } from 'perfect-arrows';
 import { clsx } from 'clsx';
 import { Point } from 'dist/types';
@@ -27,8 +27,13 @@ export const SvgArrow = (props: SvgArrowProps) => {
   const endPoint = useAnchorPoint(props.state.store, () => props.end);
   
   const arrowData = createMemo(() => {
-    const { x: x0, y: y0 } = startPoint();
-    const { x: x1, y: y1 } = endPoint();
+    const start = startPoint();
+    const end = endPoint();
+
+    if (!start || !end) return;
+
+    const { x: x0, y: y0 } = start;
+    const { x: x1, y: y1 } = end;
     
     return getArrow(x0, y0, x1, y1, {
       stretch: 0.25,
@@ -40,43 +45,57 @@ export const SvgArrow = (props: SvgArrowProps) => {
   const scale = createMemo(() => 1 / (props.viewportScale || 1));
 
   const endAngleAsDegrees = createMemo(() => {
-    const [, , , , , , ae] = arrowData();
+    const data = arrowData();
+    if (!data) return;
+
+    const [, , , , , , ae] = data;
     return ae * (180 / Math.PI);
   });
 
   const d = createMemo(() => {
-    const [sx, sy, cx, cy, ex, ey] = arrowData();
+    const data = arrowData();
+    if (!data) return;
+
+    const [sx, sy, cx, cy, ex, ey] = data;
     return `M${sx},${sy} Q${cx},${cy} ${ex},${ey}`;
   });
 
   return (
-    <g class={clsx('a9s-arrow', props.class)}>
-      <path 
-        class="a9s-arrow-buffer" 
-        d={d()} 
-        onClick={props.onClick} />
+    <Show when={arrowData()}>
+      {arrowData => (
+        <Show when={d()}>
+          {d => (
+            <g class={clsx('a9s-arrow', props.class)}>
+              <path 
+                class="a9s-arrow-buffer" 
+                d={d()} 
+                onClick={props.onClick} />
 
-      <path 
-        class="a9s-arrow-outer" 
-        d={d()} />
+              <path 
+                class="a9s-arrow-outer" 
+                d={d()} />
 
-      <circle 
-        class="a9s-arrow-base"
-        cx={arrowData()[0]} 
-        cy={arrowData()[1]} 
-        r={4 * scale()} 
-        onClick={props.onClick} />
+              <circle 
+                class="a9s-arrow-base"
+                cx={arrowData()[0]} 
+                cy={arrowData()[1]} 
+                r={4 * scale()} 
+                onClick={props.onClick} />
 
-      <polygon
-        class="a9s-arrow-head"
-        points="0,-6 12,0, 0,6"
-        transform={`translate(${arrowData()[4]},${arrowData()[5]}) rotate(${endAngleAsDegrees()}) scale(${scale()})`} 
-        onClick={props.onClick} />
+              <polygon
+                class="a9s-arrow-head"
+                points="0,-6 12,0, 0,6"
+                transform={`translate(${arrowData()[4]},${arrowData()[5]}) rotate(${endAngleAsDegrees()}) scale(${scale()})`} 
+                onClick={props.onClick} />
 
-      <path
-        class="a9s-arrow-inner"
-        d={d()} />
-    </g>
+              <path
+                class="a9s-arrow-inner"
+                d={d()} />
+            </g>
+          )}
+        </Show>
+      )}
+    </Show>
   )
 
 }

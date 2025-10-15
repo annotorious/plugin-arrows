@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, Index, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 import clsx from 'clsx';
 import { ImageAnnotation } from '@annotorious/annotorious';
 import { ArrowEditor } from '@/arrow-editor';
@@ -43,6 +43,11 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
   const arrows = useArrows(store);
 
   const selected = useSelection(selection);
+
+  const editedArrow = createMemo(() => {
+    const selectedIds = selected().selected.map(s => s.id);
+    return arrows().find(a => selectedIds.includes(a.id));
+  });
 
   props.onInit({
     get isEnabled() {
@@ -103,27 +108,29 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
             onCreateArrow={onCreateArrow} />
         )}
 
-        <Index each={arrows()}>
+        <For each={arrows()}>
           {arrow => (
             <Show 
-              keyed
-              when={selected().selected?.some(s => s.id === arrow().id)}
-              fallback={
-                <SvgArrow
-                  state={props.state}
-                  start={arrow().target.selector.start} 
-                  end={arrow().target.selector.end} 
-                  viewportScale={props.scale} 
-                  onClick={evt => onClickedArrow(arrow(), evt)} />
-              }>
-              <ArrowEditor 
-                arrow={arrow()} 
+              when={!selected().selected?.some(s => s.id === arrow.id)}>
+              <SvgArrow
                 state={props.state}
-                transform={props.elementToImage(svgRef)} 
-                viewportScale={props.scale} />
+                start={arrow.target.selector.start} 
+                end={arrow.target.selector.end} 
+                viewportScale={props.scale} 
+                onClick={evt => onClickedArrow(arrow, evt)} />
             </Show>
           )}
-        </Index>
+        </For>
+
+        <Show when={editedArrow()}>
+          {arrow => (
+            <ArrowEditor 
+              arrow={arrow()} 
+              state={props.state}
+              transform={props.elementToImage(svgRef)} 
+              viewportScale={props.scale} />
+          )}
+        </Show>
       </g>
     </svg>
   )

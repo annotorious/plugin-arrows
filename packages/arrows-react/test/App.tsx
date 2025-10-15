@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ImageAnnotator } from '@annotorious/react';
+import { AnnotoriousImageAnnotator, ImageAnnotator, useAnnotator } from '@annotorious/react';
 import { ArrowsPlugin } from '../src';
 
 export const App = () => {
@@ -8,15 +8,28 @@ export const App = () => {
 
   const [enabled, setEnabled] = useState(false);
 
+  const anno = useAnnotator<AnnotoriousImageAnnotator>();
+
   useEffect(() => {
     setEnabled(mode === 'ARROWS');
   }, [mode]);
+
+  const onDelete = () => {
+    if (!anno) return;
+
+    const imageAnnotations = anno.getAnnotations().filter(a => !('motivation' in a));
+    if (imageAnnotations.length > 0)
+      anno.removeAnnotation(imageAnnotations[imageAnnotations.length - 1]);
+  }
 
   return (
     <div id="content">
       <div>
         <button onClick={() => setMode(mode => mode === 'ANNOTATE' ? 'ARROWS' : 'ANNOTATE')}>
           {mode === 'ANNOTATE' ? 'Annotate' : 'Arrows'}
+        </button>
+        <button onClick={onDelete}>
+          Delete
         </button>
       </div>
 
@@ -25,7 +38,8 @@ export const App = () => {
       </ImageAnnotator>
 
       <ArrowsPlugin 
-        enabled={enabled}>
+        enabled={true}
+        mode={enabled ? 'draw' : 'select'}>
       </ArrowsPlugin>
     </div>
   )
