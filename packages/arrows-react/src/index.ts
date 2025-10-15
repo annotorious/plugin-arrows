@@ -1,3 +1,4 @@
+export * from './hooks';
 export * from './openseadragon';
 export * from './arrows-plugin';
 
