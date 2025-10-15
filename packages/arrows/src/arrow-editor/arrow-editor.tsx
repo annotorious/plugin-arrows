@@ -28,11 +28,15 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
 
   const [editedArrow, setEditedArrow] = createSignal<ArrowAnnotation>(props.arrow);
 
-  const startPoint = useAnchorPoint(store, () => 
-    editedArrow().target.selector.start);
+  createEffect(() => setEditedArrow(props.arrow));
 
-  const endPoint = useAnchorPoint(store, () => 
-    editedArrow().target.selector.end);
+  const startPoint = createMemo(() => 
+    useAnchorPoint(store, () => editedArrow().target.selector.start)()
+  );
+
+  const endPoint = createMemo(() =>
+    useAnchorPoint(store, () => editedArrow().target.selector.end)()
+  );
 
   const arrowData = createMemo(() => {
     const { x: x0, y: y0 } = startPoint();
