@@ -46,9 +46,6 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
 
   const [visibility, setVisibility] = createSignal<ArrowsVisibility | undefined>(props.options.showArrows);
 
-  // Tracks hover when the arrow drawing layer is active
-  // const [hovered, setHovered] = createSignal<ImageAnnotation | undefined>();
-
   const { store, selection } = props.state;
 
   const arrows = useArrows(store);

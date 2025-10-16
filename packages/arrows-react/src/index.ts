@@ -1,5 +1,6 @@
 export * from './hooks';
 export * from './openseadragon';
+export * from './arrow-popup-props';
 export * from './arrows-plugin';
 
 export type {

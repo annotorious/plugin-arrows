@@ -1,6 +1,20 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
+import OpenSeadragon from 'openseadragon';
 import type { FloatingArrowProps } from '@floating-ui/react';
+import { useAnnotator, useViewer } from '@annotorious/react';
+import type { AnnotoriousOpenSeadragonAnnotator } from '@annotorious/react';
 import type { ArrowPopupProps } from '../arrow-popup-props';
+import { useArrowSelection, usePopupCallbacks } from '../hooks';
+import {
+  useFloating,
+  arrow as popupArrowMarker,
+  shift,
+  inline,
+  autoUpdate,
+  flip,
+  offset,
+  FloatingArrow
+} from '@floating-ui/react';
 
 interface OSDArrowPopupProps {
 
@@ -14,6 +28,105 @@ interface OSDArrowPopupProps {
 
 export const OSDArrowPopup = (props: OSDArrowPopupProps) => {
 
-  return null;
+  const anno = useAnnotator<AnnotoriousOpenSeadragonAnnotator>();
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const viewer = useViewer();
+
+  const arrowRef = useRef(null);
+
+  const { arrow, midpoint } = useArrowSelection(viewer);
+
+  const { onCreateBody, onDeleteBody, onUpdateBody } = usePopupCallbacks(arrow);
+
+  const { refs, floatingStyles, context } = useFloating({
+    open: isOpen,
+    onOpenChange: setIsOpen,
+    middleware: [
+      inline(), 
+      offset(10),
+      flip({ crossAxis: true }),
+      shift({ 
+        crossAxis: true,
+        boundary: viewer?.element,
+        padding: { right: 5, left: 5, top: 10, bottom: 10 }
+      }),
+      popupArrowMarker({
+        element: arrowRef,
+        padding: props.arrowProps?.padding ||  5
+      })
+    ],
+    whileElementsMounted: autoUpdate
+  });
+
+  useEffect(() => {
+    if (!arrow) { 
+      setIsOpen(false);
+      return;
+    }
+
+    const setPosition = () => { 
+      const { left, top } = viewer.element.getBoundingClientRect();
+
+      const pt = viewer.viewport.imageToViewerElementCoordinates(
+        new OpenSeadragon.Point(midpoint.x, midpoint.y));
+
+      const x = pt.x + left;
+      const y = pt.y + top;
+
+      const rect = {
+        x,
+        y,
+        width: 0,
+        height: 0,
+        top: y,
+        right: x,
+        bottom: y,
+        left: x
+      }
+      
+      refs.setReference({
+        getBoundingClientRect: () => rect,
+        getClientRects: () => [rect]
+      });
+    }
+
+    window.addEventListener('scroll', setPosition, true);
+    window.addEventListener('resize', setPosition);
+    viewer.addHandler('update-viewport', setPosition);
+
+    setPosition();
+
+    setIsOpen(true);
+
+    return () => {
+      window.removeEventListener('scroll', setPosition, true);
+      window.removeEventListener('resize', setPosition);
+      viewer.removeHandler('update-viewport', setPosition);
+    };
+  }, [anno, viewer, arrow, midpoint]);
+
+  return isOpen && arrow && (
+    <div 
+      className="a9s-wire-popup a9s-openseadragon-wire-popup"
+      ref={refs.setFloating}
+      style={floatingStyles}>
+
+      {props.arrow && (
+        <FloatingArrow 
+          ref={arrowRef} 
+          context={context} 
+          {...(props.arrowProps || {})} />
+      )}
+
+      {props.popup({
+        annotation: arrow,
+        onCreateBody,
+        onDeleteBody,
+        onUpdateBody
+      })}
+    </div>
+  )
 
 }

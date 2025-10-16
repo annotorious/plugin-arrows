@@ -7,7 +7,8 @@ import {
   OpenSeadragonViewer, 
   useAnnotator,
 } from '@annotorious/react';
-import { OSDArrowsPlugin } from '../../src';
+import { OSDArrowsPlugin, OSDArrowPopup } from '../../src';
+import { Popup } from './popup';
 
 import '@annotorious/openseadragon/annotorious-openseadragon.css';
 import '@annotorious/plugin-arrows/annotorious-arrows.css';
@@ -110,6 +111,9 @@ export const App = () => {
         <OSDArrowsPlugin 
           enabled={true} 
           mode={arrowMode} />
+
+        <OSDArrowPopup 
+          popup={props => (<Popup {...props} />)} />
       </OpenSeadragonAnnotator>
     </div>
   )

@@ -24,6 +24,7 @@ interface SvgArrowProps {
 export const SvgArrow = (props: SvgArrowProps) => {
 
   const startPoint = useAnchorPoint(props.state.store, () => props.start);
+  
   const endPoint = useAnchorPoint(props.state.store, () => props.end);
   
   const arrowData = createMemo(() => {
