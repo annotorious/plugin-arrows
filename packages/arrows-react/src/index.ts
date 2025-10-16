@@ -6,5 +6,6 @@ export * from './arrows-plugin';
 export type {
   ArrowAnnotation,
   ArrowsPluginInstance,
-  ArrowsPluginMode
+  ArrowsPluginMode,
+  ArrowsVisibility
 } from '@annotorious/plugin-arrows';
