@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnnotoriousOpenSeadragonAnnotator, useAnnotator, useViewer } from '@annotorious/react';
-import { ArrowAnnotation, ArrowsPluginInstance, ArrowsPluginMode, mountOSDPlugin as _mountPlugin } from '@annotorious/plugin-arrows';
+import { mountOSDPlugin as _mountPlugin } from '@annotorious/plugin-arrows';
+import type { ArrowsPluginInstance, ArrowsPluginMode, ArrowsPluginOptions } from '@annotorious/plugin-arrows';
 
 import '@annotorious/plugin-arrows/annotorious-arrows.css';
 
-interface OSDArrowsPluginProps {
+interface OSDArrowsPluginProps extends ArrowsPluginOptions {
 
   enabled?: boolean;
 
@@ -34,12 +35,16 @@ export const OSDArrowsPlugin = (props: OSDArrowsPluginProps) => {
   }, [anno, viewer]);
 
   useEffect(() => {
-    if (instance) instance.setEnabled(props.enabled);
+    instance?.setEnabled(props.enabled);
   }, [instance, props.enabled]);
 
   useEffect(() => {
-    if (instance) instance.setMode(props.mode);
+    instance?.setMode(props.mode);
   }, [instance, props.mode]);
+
+  useEffect(() => {
+    instance?.setVisibility(props.showArrows);
+  }, [instance, props.showArrows]);
 
   return null;
 

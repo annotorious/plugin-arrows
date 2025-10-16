@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AnnotoriousImageAnnotator, AnnotoriousPlugin } from '@annotorious/react';
-import { ArrowsPluginInstance, ArrowsPluginMode, mountImagePlugin as _mountPlugin } from '@annotorious/plugin-arrows';
+import { mountImagePlugin as _mountPlugin } from '@annotorious/plugin-arrows';
+import type { ArrowsPluginInstance, ArrowsPluginMode, ArrowsPluginOptions } from '@annotorious/plugin-arrows';
 
-interface ArrowsPluginProps {
+interface ArrowsPluginProps extends ArrowsPluginOptions {
 
   enabled?: boolean;
 
@@ -20,14 +21,16 @@ export const ArrowsPlugin = (props: ArrowsPluginProps) => {
   }, []);
 
   useEffect(() => {
-    if (instance)
-      instance.setEnabled(props.enabled);
+    instance?.setEnabled(props.enabled);
   }, [instance, props.enabled]);
 
   useEffect(() => {
-    if (instance)
-      instance.setMode(props.mode);
+    instance?.setMode(props.mode);
   }, [instance, props.mode]);
+
+  useEffect(() => {
+    instance?.setVisibility(props.showArrows);
+  }, [instance, props.showArrows]);
   
   return (
     <AnnotoriousPlugin
