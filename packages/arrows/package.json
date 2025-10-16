@@ -1,6 +1,6 @@
 {
   "name": "@annotorious/plugin-arrows",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Connecting annotations with arrows",
   "author": "Rainer Simon",
   "license": "BSD-3-Clause",
