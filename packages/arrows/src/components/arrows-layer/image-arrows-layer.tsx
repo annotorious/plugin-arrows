@@ -1,8 +1,10 @@
-import { AnnotatorInstanceState, Point } from '@/types';
+import { AnnotatorInstanceState, ArrowsPluginOptions, Point } from '@/types';
 import { ArrowsLayerAPI } from './arrows-layer-api';
 import { ArrowsLayer } from './arrows-layer';
 
 interface ImageArrowsLayerProps {
+
+  options: ArrowsPluginOptions;
 
   state: AnnotatorInstanceState;
 
@@ -34,6 +36,7 @@ export const ImageArrowsLayer = (props: ImageArrowsLayerProps) => {
     <ArrowsLayer
       addEventListener={addEventListener}
       elementToImage={elementToImage}
+      options={props.options}
       state={props.state}
       onInit={props.onInit} />
   )

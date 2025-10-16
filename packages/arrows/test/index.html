@@ -10,6 +10,7 @@
       <div>
         <button id="tool">Annotate</button>
         <button id="arrow-mode" disabled>Select</button>
+        <button id="arrow-visibility">Show Always</button>
       </div>
       <img id="sample-image" src="640px-Hallstatt.jpg" />
     </div>
@@ -67,6 +68,23 @@
             arrowModeBtn.disabled = true;
           }
         });
+
+        const visibilityBtn = document.getElementById('arrow-visibility');
+        visibilityBtn.addEventListener('click', () => {
+          if (visibilityBtn.innerText === 'Show Always') {
+            visibilityBtn.innerText = 'Hover Only';
+            arrowsPlugin.setVisibility('HOVER_ONLY');
+          } else if (visibilityBtn.innerText === 'Hover Only') {
+            visibilityBtn.innerText = 'Selected Only';
+            arrowsPlugin.setVisibility('SELECTED_ONLY');
+          } else  if (visibilityBtn.innerText === 'Selected Only') {
+            visibilityBtn.innerText = 'Hover/Select';
+            arrowsPlugin.setVisibility('HOVER_OR_SELECT');
+          } else if (visibilityBtn.innerText === 'Hover/Select') {
+            visibilityBtn.innerText = 'Show Always';
+            arrowsPlugin.setVisibility('ALWAYS');
+          }
+        })
       }
     </script>
   </body>

@@ -3,10 +3,20 @@ import OpenSeadragon from 'openseadragon';
 import { OpenSeadragonAnnotator } from '@annotorious/openseadragon';
 import { createConnectionGraph } from '@/state';
 import { ArrowsLayerAPI } from '@/components';
-import { AnnotatorInstanceState, ArrowsPluginInstance, ArrowsPluginMode } from '@/types';
 import { OpenSeadragonArrowsLayer } from './osd-arrows-layer';
+import type { 
+  AnnotatorInstanceState, 
+  ArrowsPluginInstance, 
+  ArrowsPluginMode, 
+  ArrowsPluginOptions, 
+  ArrowsVisibility 
+} from '@/types';
 
-export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadragon.Viewer): ArrowsPluginInstance => {
+export const mountOSDPlugin = (
+  anno: OpenSeadragonAnnotator, 
+  viewer: OpenSeadragon.Viewer,
+  options: ArrowsPluginOptions = {}
+): ArrowsPluginInstance => {
 
   const state = anno.state as AnnotatorInstanceState;
 
@@ -31,9 +41,10 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
 
       dispose = render(() => (
         <OpenSeadragonArrowsLayer 
-          onInit={api => componentAPI = api} 
+          options={options}
           state={state}
-          viewer={viewer} />
+          viewer={viewer} 
+          onInit={api => componentAPI = api} />
       ), viewer.element);
     } else if (retries > 0) {
       setTimeout(() => mountOSDArrowsLayer(retries - 1), 100)
@@ -51,6 +62,9 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
 
   const setMode = (mode: ArrowsPluginMode) =>
     componentAPI?.setMode(mode);
+
+  const setVisibility = (visibility?: ArrowsVisibility) =>
+    componentAPI?.setVisibility(visibility);
   
   const unmount = () => {
     wasDisposed = true;
@@ -61,6 +75,7 @@ export const mountOSDPlugin = (anno: OpenSeadragonAnnotator, viewer: OpenSeadrag
   return {
     setEnabled,
     setMode,
+    setVisibility,
     unmount
   }
 

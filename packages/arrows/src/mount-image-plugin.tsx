@@ -2,9 +2,12 @@ import { render } from 'solid-js/web';
 import type { ImageAnnotation, ImageAnnotator } from '@annotorious/annotorious';
 import { ImageArrowsLayer, ArrowsLayerAPI } from '@/components';
 import { createConnectionGraph } from '@/state';
-import { AnnotatorInstanceState, ArrowsPluginInstance, ArrowsPluginMode } from '@/types';
+import { AnnotatorInstanceState, ArrowsPluginInstance, ArrowsPluginMode, ArrowsPluginOptions, ArrowsVisibility } from '@/types';
 
-export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsPluginInstance => {
+export const mountImagePlugin = (
+  anno: ImageAnnotator<ImageAnnotation>,
+  options: ArrowsPluginOptions = {}
+): ArrowsPluginInstance => {
 
   const state = anno.state as AnnotatorInstanceState;
 
@@ -16,6 +19,7 @@ export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsP
 
   const dispose = render(() => 
     <ImageArrowsLayer 
+      options={options}
       state={state}
       onInit={api => componentAPI = api} />
   , anno.element);
@@ -27,6 +31,9 @@ export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsP
 
   const setMode = (mode: ArrowsPluginMode) =>
     componentAPI?.setMode(mode);
+
+  const setVisibility = (visibility?: ArrowsVisibility) =>
+    componentAPI?.setVisibility(visibility);
   
   const unmount = () => {
     graph.destroy();
@@ -36,6 +43,7 @@ export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsP
   return {
     setEnabled,
     setMode,
+    setVisibility,
     unmount
   }
 

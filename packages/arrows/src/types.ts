@@ -51,6 +51,8 @@ export interface ArrowsPluginInstance {
 
   setMode(mode: ArrowsPluginMode): void;
 
+  setVisibility(visibility?: ArrowsVisibility): void;
+
   unmount(): void;
 
 }

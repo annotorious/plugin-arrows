@@ -1,9 +1,11 @@
 import { createSignal, onCleanup, onMount } from 'solid-js';
 import OpenSeadragon from 'openseadragon';
 import { ArrowsLayer, ArrowsLayerAPI } from '@/components';
-import { AnnotatorInstanceState, Point } from '@/types';
+import { AnnotatorInstanceState, ArrowsPluginOptions, Point } from '@/types';
 
 interface OpenSeadragonArrowsLayerProps {
+
+  options: ArrowsPluginOptions;
 
   state: AnnotatorInstanceState;
 
@@ -91,6 +93,7 @@ export const OpenSeadragonArrowsLayer = (props: OpenSeadragonArrowsLayerProps) =
     <ArrowsLayer
       addEventListener={addEventListener}
       elementToImage={elementToImage}
+      options={props.options}
       scale={scale()}
       state={props.state}
       transform={transform()}

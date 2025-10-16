@@ -1,26 +1,34 @@
 import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 import clsx from 'clsx';
-import { ImageAnnotation } from '@annotorious/annotorious';
-import { ArrowEditor } from '@/arrow-editor';
-import { ArrowTool } from '@/arrow-tool';
-import { useArrows, useSelection } from '@/hooks';
-import { AnnotatorInstanceState, ArrowAnnotation, ArrowsPluginMode, isArrowAnnotation, Point } from '@/types';
+import { ArrowEditor } from '@/components/arrow-editor';
+import { ArrowTool } from '@/components/arrow-tool';
+import { useArrows, useHover, useSelection } from '@/hooks';
 import { ArrowsLayerAPI } from './arrows-layer-api';
 import { SvgArrow } from './svg-arrow';
+import { ArrowsVisibility, isArrowAnchor, isArrowAnnotation } from '@/types';
+import type { 
+  AnnotatorInstanceState, 
+  ArrowAnnotation, 
+  ArrowsPluginMode, 
+  ArrowsPluginOptions,
+  Point 
+} from '@/types';
 
 import styles from './arrows-layer.module.css';
 
 export interface ArrowsLayerProps {
 
   addEventListener(svg?: SVGSVGElement): (name: keyof SVGSVGElementEventMap, handler: (evt: Event) => void, capture?: boolean) => () => void;
-
-  state: AnnotatorInstanceState;
-
+  
   class?: string;
 
   elementToImage(svg?: SVGSVGElement): (pt: Point) => Point;
 
+  options: ArrowsPluginOptions;
+
   scale?: number;
+    
+  state: AnnotatorInstanceState;
 
   transform?: string;
   
@@ -36,13 +44,44 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
 
   const [mode, setMode] = createSignal<ArrowsPluginMode>('select');
 
-  const [hovered, setHovered] = createSignal<ImageAnnotation | undefined>();
+  const [visibility, setVisibility] = createSignal<ArrowsVisibility | undefined>(props.options.showArrows);
 
-  const { store, selection} = props.state;
+  // Tracks hover when the arrow drawing layer is active
+  // const [hovered, setHovered] = createSignal<ImageAnnotation | undefined>();
+
+  const { store, selection } = props.state;
 
   const arrows = useArrows(store);
 
   const selected = useSelection(selection);
+
+  // Automatically tracks hover through Annotorious when the arrows-layer is `pointer-events: none`
+  const [hovered, setHovered] = useHover(props.state);
+
+  const visibleArrows = createMemo(() => {
+    const showArrows = visibility() || 'ALWAYS';
+  
+    if (showArrows === 'ALWAYS') {
+      return arrows();
+    } else {
+      const selectedIds = selected().selected.map(s => s.id);
+
+      const h = hovered();
+
+      const activeIds: string[] = 
+        showArrows === 'HOVER_ONLY' ? (h?.id ? [h?.id] : []) :
+        showArrows === 'SELECTED_ONLY' ? selectedIds :
+        [...selectedIds, ...(h?.id ? [h?.id] : [])];
+
+      return arrows().filter(c => {
+        const { start, end } = c.target.selector;
+
+        return activeIds.includes(c.id) ||
+          (isArrowAnchor(start) && activeIds.includes(start.annotationId)) ||
+          (isArrowAnchor(end) && activeIds.includes(end.annotationId));
+      });
+    }
+  });
 
   const editedArrow = createMemo(() => {
     const selectedIds = selected().selected.map(s => s.id);
@@ -54,7 +93,8 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
       return enabled();
     },
     setEnabled,
-    setMode
+    setMode,
+    setVisibility
   });
 
   const onClickedArrow = (arrow: ArrowAnnotation, evt: MouseEvent) => 
@@ -67,8 +107,6 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
   }
 
   const onPointerMove = (evt: PointerEvent) => {
-    if (mode() === 'select') return;
-
     const pt = props.elementToImage(svgRef)({ x: evt.offsetX, y: evt.offsetY });
     const hovered = store.getAt(pt.x, pt.y);
 
@@ -77,7 +115,10 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
   }
 
   createEffect(() => {
-    if (mode() === 'draw') selection.clear();
+    if (mode() === 'draw') {
+      selection.clear();
+      setHovered();
+    }
   });
 
   const onCreateArrow = (arrow: ArrowAnnotation) => {
@@ -108,7 +149,7 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
             onCreateArrow={onCreateArrow} />
         )}
 
-        <For each={arrows()}>
+        <For each={visibleArrows()}>
           {arrow => (
             <Show 
               when={!selected().selected?.some(s => s.id === arrow.id)}>
