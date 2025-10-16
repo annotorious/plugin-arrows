@@ -2,7 +2,6 @@ import { createMemo } from 'solid-js';
 import { computeSVGPath } from '@annotorious/annotorious';
 import type { ImageAnnotation, PolylineGeometry } from '@annotorious/annotorious';
 
-
 interface SvgEmphasisPolylineProps {
 
   annotation: ImageAnnotation;

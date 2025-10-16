@@ -33,12 +33,17 @@ export interface ArrowAnchor {
 
 }
 
-// Arrow use the generic Annotorious state for their own state management
 export type AnnotatorInstanceAnnotation = ImageAnnotation | ArrowAnnotation;
 
 export type AnnotatorInstanceState = ImageAnnotatorState<AnnotatorInstanceAnnotation>; 
 
-export type ArrowsPluginMode = 'draw' | 'select';
+export interface ArrowsPluginOptions {
+
+  showArrows?: ArrowsVisibility;
+
+}
+
+export type ArrowsVisibility = 'ALWAYS' | 'HOVER_ONLY' | 'SELECTED_ONLY' | 'HOVER_OR_SELECT';
 
 export interface ArrowsPluginInstance {
 
@@ -49,6 +54,8 @@ export interface ArrowsPluginInstance {
   unmount(): void;
 
 }
+
+export type ArrowsPluginMode = 'draw' | 'select';
 
 export interface Point {
 

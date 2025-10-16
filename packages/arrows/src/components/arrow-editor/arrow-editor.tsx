@@ -1,6 +1,5 @@
 import { getArrow } from 'perfect-arrows';
-import { createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
-import { Origin } from '@annotorious/core';
+import { createEffect, createMemo, createSignal } from 'solid-js';
 import { ArrowAnnotation, ArrowAnchor, isArrowAnchor, Point, AnnotatorInstanceState } from '@/types';
 import { useAnchorPoint } from '@/hooks';
 

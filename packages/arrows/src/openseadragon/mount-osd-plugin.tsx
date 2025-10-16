@@ -2,7 +2,7 @@ import { render } from 'solid-js/web';
 import OpenSeadragon from 'openseadragon';
 import { OpenSeadragonAnnotator } from '@annotorious/openseadragon';
 import { createConnectionGraph } from '@/state';
-import { ArrowsLayerAPI } from '@/arrows-layer';
+import { ArrowsLayerAPI } from '@/components';
 import { AnnotatorInstanceState, ArrowsPluginInstance, ArrowsPluginMode } from '@/types';
 import { OpenSeadragonArrowsLayer } from './osd-arrows-layer';
 

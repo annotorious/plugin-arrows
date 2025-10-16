@@ -12,7 +12,7 @@ interface OSDArrowPopupProps {
 
 }
 
-const OSDArrowPopup = (props: OSDArrowPopupProps) => {
+export const OSDArrowPopup = (props: OSDArrowPopupProps) => {
 
   return null;
 

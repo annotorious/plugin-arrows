@@ -1,8 +1,8 @@
 import { render } from 'solid-js/web';
 import type { ImageAnnotation, ImageAnnotator } from '@annotorious/annotorious';
-import { ImageArrowsLayer, ArrowsLayerAPI } from './arrows-layer';
-import { createConnectionGraph } from './state';
-import { AnnotatorInstanceState, ArrowsPluginInstance, ArrowsPluginMode } from './types';
+import { ImageArrowsLayer, ArrowsLayerAPI } from '@/components';
+import { createConnectionGraph } from '@/state';
+import { AnnotatorInstanceState, ArrowsPluginInstance, ArrowsPluginMode } from '@/types';
 
 export const mountImagePlugin = (anno: ImageAnnotator<ImageAnnotation>): ArrowsPluginInstance => {
 
