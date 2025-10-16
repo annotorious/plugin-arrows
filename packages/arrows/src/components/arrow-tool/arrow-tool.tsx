@@ -59,6 +59,7 @@ export const ArrowTool = (props: ArrowToolProps) => {
       bodies: [],
       target: {
         annotation: id,
+        created: new Date(),
         selector: {
           start: getAnchor(start, startAnnotation()), 
           end: getAnchor(end, props.hovered)
