@@ -1,7 +1,7 @@
 import { render } from 'solid-js/web';
 import OpenSeadragon from 'openseadragon';
 import { OpenSeadragonAnnotator } from '@annotorious/openseadragon';
-import { createConnectionGraph } from '@/state';
+import { createConnectionGraph, createHoverStateBridge } from '@/state';
 import { ArrowsLayerAPI } from '@/components';
 import { OpenSeadragonArrowsLayer } from './osd-arrows-layer';
 import type { 
@@ -23,6 +23,9 @@ export const mountOSDPlugin = (
   // Needed to keep arrows in sync if connected annotations 
   // are deleted!
   const graph = createConnectionGraph(state.store);
+
+  // This patches arrow mouseEnter/-Leave events into Annotorious
+  const hovered = createHoverStateBridge(state);
   
   let componentAPI: ArrowsLayerAPI |  null = null;
 
@@ -44,7 +47,8 @@ export const mountOSDPlugin = (
           options={options}
           state={state}
           viewer={viewer} 
-          onInit={api => componentAPI = api} />
+          onInit={api => componentAPI = api} 
+          onHover={hovered.set} />
       ), viewer.element);
     } else if (retries > 0) {
       setTimeout(() => mountOSDArrowsLayer(retries - 1), 100)

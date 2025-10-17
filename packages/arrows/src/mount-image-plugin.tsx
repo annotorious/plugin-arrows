@@ -1,8 +1,14 @@
 import { render } from 'solid-js/web';
 import type { ImageAnnotation, ImageAnnotator } from '@annotorious/annotorious';
 import { ImageArrowsLayer, ArrowsLayerAPI } from '@/components';
-import { createConnectionGraph } from '@/state';
-import { AnnotatorInstanceState, ArrowsPluginInstance, ArrowsPluginMode, ArrowsPluginOptions, ArrowsVisibility } from '@/types';
+import { createConnectionGraph, createHoverStateBridge } from '@/state';
+import { 
+  AnnotatorInstanceState, 
+  ArrowsPluginInstance, 
+  ArrowsPluginMode, 
+  ArrowsPluginOptions, 
+  ArrowsVisibility 
+} from '@/types';
 
 export const mountImagePlugin = (
   anno: ImageAnnotator<ImageAnnotation>,
@@ -15,13 +21,17 @@ export const mountImagePlugin = (
   // are deleted!
   const graph = createConnectionGraph(state.store);
 
+  // This patches arrow mouseEnter/-Leave events into Annotorious
+  const hovered = createHoverStateBridge(state);
+
   let componentAPI: ArrowsLayerAPI |  null = null;
 
   const dispose = render(() => 
     <ImageArrowsLayer 
       options={options}
       state={state}
-      onInit={api => componentAPI = api} />
+      onInit={api => componentAPI = api} 
+      onHover={hovered.set} />
   , anno.element);
 
   /** API **/

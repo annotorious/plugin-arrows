@@ -1,7 +1,7 @@
 import { createSignal, onCleanup, onMount } from 'solid-js';
 import OpenSeadragon from 'openseadragon';
 import { ArrowsLayer, ArrowsLayerAPI } from '@/components';
-import { AnnotatorInstanceState, ArrowsPluginOptions, Point } from '@/types';
+import { AnnotatorInstanceAnnotation, AnnotatorInstanceState, ArrowsPluginOptions, Point } from '@/types';
 
 interface OpenSeadragonArrowsLayerProps {
 
@@ -12,6 +12,8 @@ interface OpenSeadragonArrowsLayerProps {
   viewer: OpenSeadragon.Viewer;
 
   onInit(api: ArrowsLayerAPI): void;
+
+  onHover(hovered?: AnnotatorInstanceAnnotation): void;
 
 }
 
@@ -97,7 +99,8 @@ export const OpenSeadragonArrowsLayer = (props: OpenSeadragonArrowsLayerProps) =
       scale={scale()}
       state={props.state}
       transform={transform()}
-      onInit={props.onInit} />
+      onInit={props.onInit} 
+      onHover={props.onHover} />
   )
 
 }

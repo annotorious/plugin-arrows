@@ -6,7 +6,7 @@ import { useArrows, useHover, useSelection } from '@/hooks';
 import { ArrowsLayerAPI } from './arrows-layer-api';
 import { SvgArrow } from './svg-arrow';
 import { ArrowsVisibility, isArrowAnchor, isArrowAnnotation } from '@/types';
-import type { 
+import type {
   AnnotatorInstanceState, 
   ArrowAnnotation, 
   ArrowsPluginMode, 
@@ -34,6 +34,8 @@ export interface ArrowsLayerProps {
   
   onInit(api: ArrowsLayerAPI): void;
 
+  onHover(hovered?: ArrowAnnotation): void;
+
 }
 
 export const ArrowsLayer = (props: ArrowsLayerProps) => {
@@ -53,7 +55,7 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
   const selected = useSelection(selection);
 
   // Automatically tracks hover through Annotorious when the arrows-layer is `pointer-events: none`
-  const [hovered, setHovered] = useHover(props.state);
+  const [hoveredImageAnnotation, setHoveredImageAnnotation] = useHover(props.state);
 
   const visibleArrows = createMemo(() => {
     const showArrows = visibility() || 'ALWAYS';
@@ -63,12 +65,12 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
     } else {
       const selectedIds = selected().selected.map(s => s.id);
 
-      const h = hovered();
+      const hovered = hoveredImageAnnotation();
 
       const activeIds: string[] = 
-        showArrows === 'HOVER_ONLY' ? (h?.id ? [h?.id] : []) :
+        showArrows === 'HOVER_ONLY' ? (hovered?.id ? [hovered?.id] : []) :
         showArrows === 'SELECTED_ONLY' ? selectedIds :
-        [...selectedIds, ...(h?.id ? [h?.id] : [])];
+        [...selectedIds, ...(hovered?.id ? [hovered?.id] : [])];
 
       return arrows().filter(c => {
         const { start, end } = c.target.selector;
@@ -108,19 +110,19 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
     const hovered = store.getAt(pt.x, pt.y);
 
     if (!isArrowAnnotation(hovered))
-      setHovered(hovered);
+      setHoveredImageAnnotation(hovered);
   }
 
   createEffect(() => {
     if (mode() === 'draw') {
       selection.clear();
-      setHovered();
+      setHoveredImageAnnotation();
     }
   });
 
   const onCreateArrow = (arrow: ArrowAnnotation) => {
     store.addAnnotation(arrow);
-    setHovered(undefined);
+    setHoveredImageAnnotation(undefined);
   }
 
   return (
@@ -139,7 +141,7 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
         {mode() === 'draw' && (
           <ArrowTool
             addEventListener={props.addEventListener(svgRef)}
-            hovered={hovered()}
+            hovered={hoveredImageAnnotation()}
             state={props.state}
             transform={props.elementToImage(svgRef)} 
             viewportScale={props.scale}
@@ -155,7 +157,8 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
                 start={arrow.target.selector.start} 
                 end={arrow.target.selector.end} 
                 viewportScale={props.scale} 
-                onClick={evt => onClickedArrow(arrow, evt)} />
+                onClick={evt => onClickedArrow(arrow, evt)} 
+                onHover={hovered => hovered ? props.onHover(arrow) : props.onHover()} />
             </Show>
           )}
         </For>

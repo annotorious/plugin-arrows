@@ -19,6 +19,8 @@ interface SvgArrowProps {
 
   onClick?(evt: MouseEvent): void;
 
+  onHover?(hovered: boolean): void;
+
 }
 
 export const SvgArrow = (props: SvgArrowProps) => {
@@ -66,7 +68,10 @@ export const SvgArrow = (props: SvgArrowProps) => {
       {arrowData => (
         <Show when={d()}>
           {d => (
-            <g class={clsx('a9s-arrow', props.class)}>
+            <g 
+              class={clsx('a9s-arrow', props.class)}
+              onPointerEnter={() => props.onHover(true)}
+              onPointerLeave={() => props.onHover(false)}>
               <path 
                 class="a9s-arrow-buffer" 
                 d={d()} 

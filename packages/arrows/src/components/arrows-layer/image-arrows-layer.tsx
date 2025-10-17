@@ -1,4 +1,4 @@
-import { AnnotatorInstanceState, ArrowsPluginOptions, Point } from '@/types';
+import { AnnotatorInstanceAnnotation, AnnotatorInstanceState, ArrowsPluginOptions, Point } from '@/types';
 import { ArrowsLayerAPI } from './arrows-layer-api';
 import { ArrowsLayer } from './arrows-layer';
 
@@ -9,6 +9,8 @@ interface ImageArrowsLayerProps {
   state: AnnotatorInstanceState;
 
   onInit(api: ArrowsLayerAPI): void;
+
+  onHover(hovered?: AnnotatorInstanceAnnotation): void;
 
 }
 
@@ -38,7 +40,8 @@ export const ImageArrowsLayer = (props: ImageArrowsLayerProps) => {
       elementToImage={elementToImage}
       options={props.options}
       state={props.state}
-      onInit={props.onInit} />
+      onInit={props.onInit} 
+      onHover={props.onHover} />
   )
 
 }

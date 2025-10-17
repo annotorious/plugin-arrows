@@ -9,8 +9,10 @@ export {
 } from '@annotorious/plugin-arrows';
 
 export type {
+  ArrowAnchor,
   ArrowAnnotation,
   ArrowsPluginInstance,
   ArrowsPluginMode,
-  ArrowsVisibility
+  ArrowsVisibility,
+  Point
 } from '@annotorious/plugin-arrows';
