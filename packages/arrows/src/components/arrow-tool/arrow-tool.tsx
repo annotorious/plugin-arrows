@@ -2,6 +2,7 @@ import { createSignal, onCleanup, onMount, Show } from 'solid-js';
 import { v4 as uuidv4 } from 'uuid';
 import type { ImageAnnotation } from '@annotorious/annotorious';
 import { ArrowAnnotation, ArrowAnchor, Point, AnnotatorInstanceState } from '@/types';
+import { round } from '@/utils';
 import { SvgArrow } from '@/components/arrows-layer/svg-arrow';
 import { SvgEmphasis } from './svg-emphasis';
 
@@ -36,14 +37,17 @@ export const ArrowTool = (props: ArrowToolProps) => {
   const createArrow = (start: Point, end: Point): ArrowAnnotation => {
 
     const getAnchor = (pt: Point, annotation?: ImageAnnotation): Point | ArrowAnchor => {
-      if (!annotation) return pt;
+      if (!annotation) return ({
+        x: round(pt.x),
+        y: round(pt.y)
+      });
 
       const { maxX, minX, maxY, minY } = annotation.target.selector.geometry.bounds;
       const cx = (maxX + minX) / 2;
       const cy = (maxY + minY) / 2;
 
-      const offsetX = pt.x - cx;
-      const offsetY = pt.y - cy;
+      const offsetX = round(pt.x - cx);
+      const offsetY = round(pt.y - cy);
 
       return {
         annotationId: annotation.id,

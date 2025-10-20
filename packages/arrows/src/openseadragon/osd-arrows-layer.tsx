@@ -19,7 +19,7 @@ interface OpenSeadragonArrowsLayerProps {
 
 export const OpenSeadragonArrowsLayer = (props: OpenSeadragonArrowsLayerProps) => {
 
-  const [transform, setTranform] = createSignal<string | undefined>();
+  const [transform, setTransform] = createSignal<string | undefined>();
 
   const [scale, setScale] = createSignal(1);
 
@@ -78,7 +78,7 @@ export const OpenSeadragonArrowsLayer = (props: OpenSeadragonArrowsLayerProps) =
     // @ts-ignore note: getRotation(true <- realtime value) only since OSD 4!
     const rotation = props.viewer.viewport.getRotation(true);
 
-    setTranform(`translate(${p.x}, ${p.y}) scale(${scaleX}, ${scaleY}) rotate(${rotation})`);
+    setTransform(`translate(${p.x}, ${p.y}) scale(${scaleX}, ${scaleY}) rotate(${rotation})`);
 
     setScale(zoom * containerWidth / props.viewer.world.getContentFactor());
   }
