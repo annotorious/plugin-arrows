@@ -1,7 +1,6 @@
 import { AnnotatorInstanceAnnotation, AnnotatorInstanceState, ArrowsPluginOptions, Point } from '@/types';
 import { ArrowsLayerAPI } from './arrows-layer-api';
 import { ArrowsLayer } from './arrows-layer';
-import { round } from '@/utils';
 
 interface ImageArrowsLayerProps {
 

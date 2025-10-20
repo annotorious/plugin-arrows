@@ -2,7 +2,6 @@ import { createSignal, onCleanup, onMount } from 'solid-js';
 import OpenSeadragon from 'openseadragon';
 import { ArrowsLayer, ArrowsLayerAPI } from '@/components';
 import { AnnotatorInstanceAnnotation, AnnotatorInstanceState, ArrowsPluginOptions, Point } from '@/types';
-import { round } from '@/utils';
 
 interface OpenSeadragonArrowsLayerProps {
 

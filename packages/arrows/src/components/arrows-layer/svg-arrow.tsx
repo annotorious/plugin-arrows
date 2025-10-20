@@ -71,7 +71,7 @@ export const SvgArrow = (props: SvgArrowProps) => {
             <g 
               class={clsx('a9s-arrow', props.class)}
               onPointerEnter={() => props.onHover?.(true)}
-              onPointerLeave={() => props?.onHover?.(false)}>
+              onPointerLeave={() => props.onHover?.(false)}>
               <path 
                 class="a9s-arrow-buffer" 
                 d={d()} 

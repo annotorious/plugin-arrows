@@ -2,9 +2,9 @@ import { createSignal, onCleanup, onMount, Show } from 'solid-js';
 import { v4 as uuidv4 } from 'uuid';
 import type { ImageAnnotation } from '@annotorious/annotorious';
 import { ArrowAnnotation, ArrowAnchor, Point, AnnotatorInstanceState } from '@/types';
+import { round } from '@/utils';
 import { SvgArrow } from '@/components/arrows-layer/svg-arrow';
 import { SvgEmphasis } from './svg-emphasis';
-import { round } from '@/utils';
 
 interface ArrowToolProps {
 
