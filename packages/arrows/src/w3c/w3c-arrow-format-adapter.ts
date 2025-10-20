@@ -1,13 +1,12 @@
 import { v5 as uuidv5 } from 'uuid';
-import { parseFragmentSelector, serializeFragmentSelector, W3CImageFormat } from '@annotorious/annotorious';
-import { AnnotatorInstanceAnnotation, ArrowAnchor, isArrowAnchor, isArrowAnnotation, Point, type ArrowAnnotation } from '@/types';
+import { parseFragmentSelector, W3CImageFormat } from '@annotorious/annotorious';
+import { isArrowAnchor, isArrowAnnotation } from '@/types';
+import type {ArrowAnnotation, AnnotatorInstanceAnnotation, ArrowAnchor, Point } from '@/types';
 import { isW3CArrowLinkAnnotation, isW3CArrowMetaAnnotation } from './w3c-arrow-annotation';
 import type { W3CArrowLinkEdge, W3CArrowLinkAnnotation, W3CArrowMetaAnnotation } from './w3c-arrow-annotation';
 import type { 
   FormatAdapter, 
-  ImageAnnotation, 
-  ParseResult, 
-  RectangleGeometry, 
+  ParseResult,
   W3CAnnotationBody, 
   W3CImageAnnotation, 
   W3CImageFormatAdapter, 
@@ -21,7 +20,7 @@ type W3CAnnotationOrArrow =
 // Internal model to W3C
 export type W3CArrowFormatAdapter = FormatAdapter<AnnotatorInstanceAnnotation, W3CAnnotationOrArrow>;
 
-export const W3CImageRelationFormat = (
+export const W3CImageArrowFormat = (
   source: string,
   opts: W3CImageFormatAdapterOpts = { strict: true, invertY: false }
 ): W3CArrowFormatAdapter => {
