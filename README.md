@@ -1,5 +1,7 @@
 # Annotorious Arrows Plugin
 
+![Annotorious Arrow Plugin demo video](/demo-video.gif "Annotorious Arrow Plugin demo video")
+
 An Annotorious plugin for drawing arrows. Arrows can be independent annotations, or they can be linked to existing shapes — either on both ends, or on one end only (start or tip). When linked, the relationships are represented in the data model.
 
 Also available: [React wrapper](packages/arrows-react)
