@@ -24,7 +24,7 @@
 
       window.onload = function() {    
         const anno = createImageAnnotator('sample-image', {
-          // adapter: W3CImageArrowFormat(document.getElementById('sample-image').src)
+          adapter: W3CImageArrowFormat(document.getElementById('sample-image').src)
         });
 
         const arrowsPlugin = mountImagePlugin(anno);
