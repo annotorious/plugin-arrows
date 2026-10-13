@@ -1,8 +1,8 @@
-import { render } from 'solid-js/web';
 import OpenSeadragon from 'openseadragon';
 import { OpenSeadragonAnnotator } from '@annotorious/openseadragon';
 import { createConnectionGraph, createHoverStateBridge } from '@/state';
 import { ArrowsLayerAPI } from '@/components';
+import { renderLayer } from '@/render-layer';
 import { OpenSeadragonArrowsLayer } from './osd-arrows-layer';
 import type { 
   AnnotatorInstanceState, 
@@ -37,12 +37,13 @@ export const mountOSDPlugin = (
   // plugin! Ensure that everything is properly set up before we init the
   // wires layer, because it will attach listeners to the annotation layer!
   const mountOSDArrowsLayer = (retries = 10) => {
+    // In case the plugin was disposed while waiting for retry (e.g. 
+    // because the viewer was destroyed, and will never become ready)
+    if (wasDisposed) return;
+
     const isReady = Boolean(viewer.element);
     if (isReady) {
-      // In case the plugin was disposed while waiting for retry
-      if (wasDisposed) return;
-
-      dispose = render(() => (
+      dispose = renderLayer(() => (
         <OpenSeadragonArrowsLayer 
           options={options}
           state={state}
