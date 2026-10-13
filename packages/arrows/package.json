@@ -45,7 +45,7 @@
   "peerDependencies": {
     "@annotorious/annotorious": "^3.7.12",
     "@annotorious/openseadragon": "^3.7.12",
-    "openseadragon": ">= ^4.x || >= ^5.x"
+    "openseadragon": ">= ^4.x || >= ^5.x || >= ^6.x"
   },
   "peerDependenciesMeta": {
     "openseadragon": {
