@@ -1,8 +1,11 @@
+import type { User } from '@annotorious/annotorious';
 import { AnnotatorInstanceAnnotation, AnnotatorInstanceState, ArrowsPluginOptions, Point } from '@/types';
 import { ArrowsLayerAPI } from './arrows-layer-api';
 import { ArrowsLayer } from './arrows-layer';
 
 interface ImageArrowsLayerProps {
+
+  getUser?(): User;
 
   options: ArrowsPluginOptions;
 
@@ -38,6 +41,7 @@ export const ImageArrowsLayer = (props: ImageArrowsLayerProps) => {
     <ArrowsLayer
       addEventListener={addEventListener}
       elementToImage={elementToImage}
+      getUser={props.getUser}
       options={props.options}
       state={props.state}
       onInit={props.onInit} 

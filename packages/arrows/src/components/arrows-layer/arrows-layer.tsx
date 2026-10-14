@@ -1,5 +1,6 @@
 import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 import clsx from 'clsx';
+import type { User } from '@annotorious/annotorious';
 import { ArrowEditor } from '@/components/arrow-editor';
 import { ArrowTool } from '@/components/arrow-tool';
 import { useArrows, useHover, useSelection } from '@/hooks';
@@ -23,6 +24,8 @@ export interface ArrowsLayerProps {
   class?: string;
 
   elementToImage(svg?: SVGSVGElement): (pt: Point) => Point;
+
+  getUser?(): User;
 
   options: ArrowsPluginOptions;
 
@@ -121,7 +124,11 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
   });
 
   const onCreateArrow = (arrow: ArrowAnnotation) => {
-    store.addAnnotation(arrow);
+    // Like Annotorious does for shapes, stamp the current user as creator
+    const creator = props.getUser?.();
+    store.addAnnotation(creator 
+      ? { ...arrow, target: { ...arrow.target, creator } } 
+      : arrow);
     setHoveredImageAnnotation(undefined);
   }
 

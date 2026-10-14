@@ -28,6 +28,7 @@ export const mountImagePlugin = (
 
   const dispose = render(() => 
     <ImageArrowsLayer 
+      getUser={anno.getUser}
       options={options}
       state={state}
       onInit={api => componentAPI = api} 
