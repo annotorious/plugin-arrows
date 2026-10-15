@@ -32,7 +32,8 @@
   vector-effect: non-scaling-stroke;
 }
 
-.container :global(.a9s-arrow.a9s-arrow-editor .a9s-arrow-buffer) {
+.container :global(.a9s-arrow.a9s-arrow-editor .a9s-arrow-buffer),
+.container :global(.a9s-arrow.a9s-arrow-selected .a9s-arrow-buffer) {
   stroke: #fff;
   stroke-opacity: 0.5
 }
