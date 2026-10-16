@@ -16,7 +16,7 @@ interface OpenSeadragonArrowsLayerProps {
 
   onInit(api: ArrowsLayerAPI): void;
 
-  onHover(hovered?: AnnotatorInstanceAnnotation): void;
+  onHover(hovered?: AnnotatorInstanceAnnotation | null): void;
 
 }
 

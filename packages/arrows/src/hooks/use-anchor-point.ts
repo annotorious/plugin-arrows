@@ -1,20 +1,22 @@
 import { Accessor, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
 import { isImageAnnotation } from '@annotorious/annotorious';
-import type { ImageAnnotation, ImageAnnotationStore, StoreChangeEvent } from '@annotorious/annotorious';
+import type { ImageAnnotationStore, StoreChangeEvent } from '@annotorious/annotorious';
 import { isArrowAnchor } from '@/types';
 import type { AnnotatorInstanceAnnotation, ArrowAnchor, Point } from '@/types';
 
 const useAnnotation = (store: ImageAnnotationStore<AnnotatorInstanceAnnotation>, id: string) => {
 
-  const [annotation, setAnnotation] = createSignal<AnnotatorInstanceAnnotation | null>(store.getAnnotation(id));
+  const [annotation, setAnnotation] = createSignal<AnnotatorInstanceAnnotation | null>(
+    store.getAnnotation(id) ?? null
+  );
 
   onMount(() => {
-    const onStoreChange = ((event: StoreChangeEvent<ImageAnnotation>) => {
+    const onStoreChange = (event: StoreChangeEvent<AnnotatorInstanceAnnotation>) => {
       const { created: c, deleted: d, updated: u } = event.changes;
 
-      const created = c.find(a => a.id === id);
-      const deleted = d.find(a => a.id === id);
-      const updated = u.find(u => u.oldValue.id === id)?.newValue;
+      const created = c?.find(a => a.id === id);
+      const deleted = d?.find(a => a.id === id);
+      const updated = u?.find(u => u.oldValue.id === id)?.newValue;
 
       if (updated) 
         setAnnotation(updated);
@@ -22,7 +24,7 @@ const useAnnotation = (store: ImageAnnotationStore<AnnotatorInstanceAnnotation>,
         setAnnotation(null);
       else if (created)
         setAnnotation(created);
-    });
+    };
 
     store.observe(onStoreChange, { annotations: id });
 

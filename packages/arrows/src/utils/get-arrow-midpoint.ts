@@ -7,11 +7,13 @@ export const getArrowMidpoint = (
   store: Store<AnnotatorInstanceAnnotation>, 
   arrow: ArrowAnnotation, 
   viewportScale = 1
-): Point => {
+): Point | undefined => {
   const { start, end } = arrow.target.selector;
 
   const startPoint = getAnchorPoint(store, start);
   const endPoint = getAnchorPoint(store, end);
+
+  if (!startPoint || !endPoint) return;
 
   const { x: x0, y: y0 } = startPoint;
   const { x: x1, y: y1 } = endPoint;

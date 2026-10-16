@@ -1,5 +1,5 @@
 import { createSignal, onCleanup, onMount } from 'solid-js';
-import { isImageAnnotation, type HoverState, type ImageAnnotation } from '@annotorious/annotorious';
+import { isImageAnnotation, type ImageAnnotation } from '@annotorious/annotorious';
 import { AnnotatorInstanceState } from '@/types';
 
 export const useHover = (state: AnnotatorInstanceState) => {

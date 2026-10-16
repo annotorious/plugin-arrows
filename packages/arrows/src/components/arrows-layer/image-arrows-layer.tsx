@@ -13,14 +13,14 @@ interface ImageArrowsLayerProps {
 
   onInit(api: ArrowsLayerAPI): void;
 
-  onHover(hovered?: AnnotatorInstanceAnnotation): void;
+  onHover(hovered?: AnnotatorInstanceAnnotation | null): void;
 
 }
 
 export const ImageArrowsLayer = (props: ImageArrowsLayerProps) => {
 
-  const elementToImage = (svg: SVGSVGElement) => (pt: Point) => {
-    if (!svg) return;
+  const elementToImage = (svg?: SVGSVGElement) => (pt: Point) => {
+    if (!svg) return { x: 0, y: 0 } as Point;
 
     const svgPt = svg.createSVGPoint();
     svgPt.x = pt.x; 
