@@ -26,7 +26,7 @@ interface OSDArrowPopupProps {
 
 }
 
-interface ArrowPopupContentProps {
+interface OSDArrowPopupContentProps {
 
   arrow: ArrowAnnotation;
 
@@ -34,7 +34,7 @@ interface ArrowPopupContentProps {
 
 }
 
-const ArrowPopupContent = (props: ArrowPopupContentProps) => {
+const OSDArrowPopupContent = (props: OSDArrowPopupContentProps) => {
   const { onCreateBody, onDeleteBody, onUpdateBody } = usePopupCallbacks(props.arrow);
 
   return props.popup({
@@ -135,7 +135,7 @@ export const OSDArrowPopup = (props: OSDArrowPopupProps) => {
           {...(props.arrowProps || {})} />
       )}
 
-      <ArrowPopupContent arrow={arrow} popup={props.popup} />
+      <OSDArrowPopupContent arrow={arrow} popup={props.popup} />
     </div>
   )
 
