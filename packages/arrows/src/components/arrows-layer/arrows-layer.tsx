@@ -1,5 +1,6 @@
 import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 import clsx from 'clsx';
+import type { Filter } from '@annotorious/annotorious';
 import type { User } from '@annotorious/annotorious';
 import { ArrowEditor } from '@/components/arrow-editor';
 import { ArrowTool } from '@/components/arrow-tool';
@@ -51,9 +52,19 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
 
   const [visibility, setVisibility] = createSignal<ArrowsVisibility | undefined>(props.options.showArrows);
 
+  // NOTE: since the filter itself will be a function, and Solid treates
+  // functions passed to setters as specifically "functions to update a value
+  // based on the previous value", calls to setFilter need to be wrapped
+  const [filter, setFilter] = createSignal<Filter<ArrowAnnotation> | undefined>(props.options.filter);
+
   const { store, selection } = props.state;
 
-  const arrows = useArrows(store);
+  const allArrows = useArrows(store);
+
+  const arrows = createMemo(() => {
+    const f = filter();
+    return f ? allArrows().filter(f) : allArrows();
+  });
 
   const selected = useSelection(selection);
 
@@ -101,6 +112,7 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
       return enabled();
     },
     setEnabled,
+    setFilter: (filter?: Filter<ArrowAnnotation>) => setFilter(() => filter),
     setMode,
     setVisibility
   });

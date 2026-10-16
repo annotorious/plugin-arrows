@@ -31,6 +31,10 @@ export const ArrowsPlugin = (props: ArrowsPluginProps) => {
   useEffect(() => {
     instance?.setVisibility(props.showArrows);
   }, [instance, props.showArrows]);
+
+  useEffect(() => {
+    instance?.setFilter(props.filter);
+  }, [instance, props.filter]);
   
   return (
     <AnnotoriousPlugin

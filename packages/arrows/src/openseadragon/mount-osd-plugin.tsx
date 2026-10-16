@@ -1,11 +1,13 @@
 import { render } from 'solid-js/web';
 import OpenSeadragon from 'openseadragon';
+import type { Filter } from '@annotorious/annotorious';
 import { OpenSeadragonAnnotator } from '@annotorious/openseadragon';
 import { createConnectionGraph, createHoverStateBridge } from '@/state';
 import { ArrowsLayerAPI } from '@/components';
 import { OpenSeadragonArrowsLayer } from './osd-arrows-layer';
 import type { 
   AnnotatorInstanceState, 
+  ArrowAnnotation,
   ArrowsPluginInstance, 
   ArrowsPluginMode, 
   ArrowsPluginOptions, 
@@ -65,6 +67,9 @@ export const mountOSDPlugin = (
   const setEnabled = (enabled: boolean) =>
     componentAPI?.setEnabled(enabled);
 
+  const setFilter = (filter?: Filter<ArrowAnnotation>) =>
+    componentAPI?.setFilter(filter);
+
   const setMode = (mode: ArrowsPluginMode) =>
     componentAPI?.setMode(mode);
 
@@ -79,6 +84,7 @@ export const mountOSDPlugin = (
 
   return {
     setEnabled,
+    setFilter,
     setMode,
     setVisibility,
     unmount

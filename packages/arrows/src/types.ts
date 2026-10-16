@@ -1,6 +1,7 @@
 import type { 
   Annotation, 
   AnnotationTarget, 
+  Filter,
   ImageAnnotation, 
   ImageAnnotatorState 
 } from '@annotorious/annotorious';
@@ -39,6 +40,8 @@ export type AnnotatorInstanceState = ImageAnnotatorState<AnnotatorInstanceAnnota
 
 export interface ArrowsPluginOptions {
 
+  filter?: Filter<ArrowAnnotation>;
+
   showArrows?: ArrowsVisibility;
 
 }
@@ -48,6 +51,8 @@ export type ArrowsVisibility = 'ALWAYS' | 'HOVER_ONLY' | 'SELECTED_ONLY' | 'HOVE
 export interface ArrowsPluginInstance {
 
   setEnabled(enabled: boolean): void;
+
+  setFilter(filter?: Filter<ArrowAnnotation>): void;
 
   setMode(mode: ArrowsPluginMode): void;
 

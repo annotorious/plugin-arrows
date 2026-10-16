@@ -1,9 +1,10 @@
 import { render } from 'solid-js/web';
-import type { ImageAnnotation, ImageAnnotator } from '@annotorious/annotorious';
+import type { Filter, ImageAnnotation, ImageAnnotator } from '@annotorious/annotorious';
 import { ImageArrowsLayer, ArrowsLayerAPI } from '@/components';
 import { createConnectionGraph, createHoverStateBridge } from '@/state';
 import { 
   AnnotatorInstanceState, 
+  ArrowAnnotation,
   ArrowsPluginInstance, 
   ArrowsPluginMode, 
   ArrowsPluginOptions, 
@@ -40,6 +41,9 @@ export const mountImagePlugin = (
   const setEnabled = (enabled: boolean) =>
     componentAPI?.setEnabled(enabled);
 
+  const setFilter = (filter?: Filter<ArrowAnnotation>) =>
+    componentAPI?.setFilter(filter);
+
   const setMode = (mode: ArrowsPluginMode) =>
     componentAPI?.setMode(mode);
 
@@ -53,6 +57,7 @@ export const mountImagePlugin = (
 
   return {
     setEnabled,
+    setFilter,
     setMode,
     setVisibility,
     unmount
