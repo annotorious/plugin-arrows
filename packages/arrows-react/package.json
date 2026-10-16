@@ -1,6 +1,6 @@
 {
   "name": "@annotorious/plugin-arrows-react",
-  "version": "0.4.0-beta",
+  "version": "0.4.0",
   "description": "React bindings for the Annotorious arrows plugin.",
   "author": "Rainer Simon",
   "license": "BSD-3-Clause",
@@ -51,7 +51,7 @@
     }
   },
   "dependencies": {
-    "@annotorious/plugin-arrows": "0.4.0-beta",
+    "@annotorious/plugin-arrows": "0.4.0",
     "@floating-ui/react": "^0.27.20",
     "uuid": "^14.0.3"
   },
