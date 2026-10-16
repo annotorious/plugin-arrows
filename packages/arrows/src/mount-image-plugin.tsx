@@ -1,7 +1,9 @@
+import type { ImageAnnotation, ImageAnnotator } from '@annotorious/annotorious';
 import { render } from 'solid-js/web';
 import type { Filter, ImageAnnotation, ImageAnnotator } from '@annotorious/annotorious';
 import { ImageArrowsLayer, ArrowsLayerAPI } from '@/components';
 import { createConnectionGraph, createHoverStateBridge } from '@/state';
+import { renderLayer } from '@/render-layer';
 import { 
   AnnotatorInstanceState, 
   ArrowAnnotation,
@@ -27,7 +29,7 @@ export const mountImagePlugin = (
 
   let componentAPI: ArrowsLayerAPI |  null = null;
 
-  const dispose = render(() => 
+  const dispose = renderLayer(() => 
     <ImageArrowsLayer 
       getUser={anno.getUser}
       options={options}
