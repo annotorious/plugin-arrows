@@ -1,5 +1,7 @@
 import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 import clsx from 'clsx';
+import type { Filter } from '@annotorious/annotorious';
+import type { User } from '@annotorious/annotorious';
 import { ArrowEditor } from '@/components/arrow-editor';
 import { ArrowTool } from '@/components/arrow-tool';
 import { useArrows, useHover, useSelection } from '@/hooks';
@@ -23,6 +25,8 @@ export interface ArrowsLayerProps {
   class?: string;
 
   elementToImage(svg?: SVGSVGElement): (pt: Point) => Point;
+
+  getUser?(): User;
 
   options: ArrowsPluginOptions;
 
@@ -48,9 +52,19 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
 
   const [visibility, setVisibility] = createSignal<ArrowsVisibility | undefined>(props.options.showArrows);
 
+  // NOTE: since the filter itself will be a function, and Solid treates
+  // functions passed to setters as specifically "functions to update a value
+  // based on the previous value", calls to setFilter need to be wrapped
+  const [filter, setFilter] = createSignal<Filter<ArrowAnnotation> | undefined>(props.options.filter);
+
   const { store, selection } = props.state;
 
-  const arrows = useArrows(store);
+  const allArrows = useArrows(store);
+
+  const arrows = createMemo(() => {
+    const f = filter();
+    return f ? allArrows().filter(f) : allArrows();
+  });
 
   const selected = useSelection(selection);
 
@@ -82,9 +96,15 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
     }
   });
 
+  const isSelected = (arrow: ArrowAnnotation) =>
+    selected().selected?.some(s => s.id === arrow.id);
+
   const editedArrow = createMemo(() => {
-    const selectedIds = selected().selected.map(s => s.id);
-    return arrows().find(a => selectedIds.includes(a.id));
+    const editableIds = selected().selected
+      .filter(s => s.editable)
+      .map(s => s.id);
+
+    return arrows().find(a => editableIds.includes(a.id));
   });
 
   props.onInit({
@@ -92,6 +112,7 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
       return enabled();
     },
     setEnabled,
+    setFilter: (filter?: Filter<ArrowAnnotation>) => setFilter(() => filter),
     setMode,
     setVisibility
   });
@@ -121,7 +142,11 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
   });
 
   const onCreateArrow = (arrow: ArrowAnnotation) => {
-    store.addAnnotation(arrow);
+    // Like Annotorious does for shapes, stamp the current user as creator
+    const creator = props.getUser?.();
+    store.addAnnotation(creator 
+      ? { ...arrow, target: { ...arrow.target, creator } } 
+      : arrow);
     setHoveredImageAnnotation(undefined);
   }
 
@@ -151,8 +176,9 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
         <For each={visibleArrows()}>
           {arrow => (
             <Show 
-              when={!selected().selected?.some(s => s.id === arrow.id)}>
+              when={editedArrow()?.id !== arrow.id}>
               <SvgArrow
+                class={isSelected(arrow) ? 'a9s-arrow-selected' : undefined}
                 state={props.state}
                 start={arrow.target.selector.start} 
                 end={arrow.target.selector.end} 

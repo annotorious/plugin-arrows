@@ -46,6 +46,10 @@ export const OSDArrowsPlugin = (props: OSDArrowsPluginProps) => {
     instance?.setVisibility(props.showArrows);
   }, [instance, props.showArrows]);
 
+  useEffect(() => {
+    instance?.setFilter(props.filter);
+  }, [instance, props.filter]);
+
   return null;
 
 }
