@@ -2,9 +2,9 @@ import { type ReactNode, useEffect, useRef, useState } from 'react';
 import OpenSeadragon from 'openseadragon';
 import type { FloatingArrowProps } from '@floating-ui/react';
 import { useViewer } from '@annotorious/react';
+import type { ArrowAnnotation } from '@annotorious/plugin-arrows';
 import type { ArrowPopupProps } from '../arrow-popup-props';
 import { useArrowSelection, usePopupCallbacks } from '../hooks';
-import type { ArrowAnnotation } from '@annotorious/plugin-arrows';
 import {
   useFloating,
   arrow as popupArrowMarker,
