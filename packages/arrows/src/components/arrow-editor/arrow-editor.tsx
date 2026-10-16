@@ -52,6 +52,14 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
 
   const scale = createMemo(() => 1 / (props.viewportScale || 1));
 
+  const d = createMemo(() => {
+    const data = arrowData();
+    if (!data) return;
+
+    const [sx, sy, cx, cy, ex, ey] = data;
+    return `M${sx},${sy} Q${cx},${cy} ${ex},${ey}`;
+  });
+
   const onGrab = (handle: string) => (evt: PointerEvent) => {
     grabbedHandle = handle;
 
@@ -112,43 +120,38 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
 
   return (
     <Show when={arrowData()}>
-      {data => {
-        const [sx, sy, cx, cy, ex, ey, angle] = data();
-        const d = `M${sx},${sy} Q${cx},${cy} ${ex},${ey}`;
+      {data => (
+        <g
+          class="a9s-arrow a9s-arrow-editor"
+          onPointerUp={onRelease}
+          onPointerMove={onPointerMove}>
+          <path
+            class="a9s-arrow-buffer"
+            d={d()}
+            onPointerDown={onGrab('arrow')} />
 
-        return (
-          <g
-            class="a9s-arrow a9s-arrow-editor"
-            onPointerUp={onRelease}
-            onPointerMove={onPointerMove}>
-            <path
-              class="a9s-arrow-buffer"
-              d={d}
-              onPointerDown={onGrab('arrow')} />
+          <path
+            class="a9s-arrow-outer"
+            d={d()} />
 
-            <path
-              class="a9s-arrow-outer"
-              d={d} />
+          <circle
+            class="a9s-arrow-base"
+            cx={data()[0]}
+            cy={data()[1]}
+            r={4 * scale()}
+            onPointerDown={onGrab('start')} />
 
-            <circle
-              class="a9s-arrow-base"
-              cx={sx}
-              cy={sy}
-              r={4 * scale()}
-              onPointerDown={onGrab('start')} />
+          <polygon
+            class="a9s-arrow-head"
+            points="0,-6 12,0, 0,6"
+            transform={`translate(${data()[4]},${data()[5]}) rotate(${data()[6] * (180 / Math.PI)}) scale(${scale()})`}
+            onPointerDown={onGrab('end')} />
 
-            <polygon
-              class="a9s-arrow-head"
-              points="0,-6 12,0, 0,6"
-              transform={`translate(${ex},${ey}) rotate(${angle * (180 / Math.PI)}) scale(${scale()})`}
-              onPointerDown={onGrab('end')} />
-
-            <path
-              class="a9s-arrow-inner"
-              d={d} />
-          </g>
-        );
-      }}
+          <path
+            class="a9s-arrow-inner"
+            d={d()} />
+        </g>
+      )}
     </Show>
   )
 
