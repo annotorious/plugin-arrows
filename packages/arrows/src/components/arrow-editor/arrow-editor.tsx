@@ -1,5 +1,5 @@
 import { getArrow } from 'perfect-arrows';
-import { createEffect, createMemo, createSignal } from 'solid-js';
+import { createEffect, createMemo, createSignal, Show } from 'solid-js';
 import { ArrowAnnotation, ArrowAnchor, isArrowAnchor, Point, AnnotatorInstanceState } from '@/types';
 import { useAnchorPoint } from '@/hooks';
 
@@ -38,10 +38,12 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
   );
 
   const arrowData = createMemo(() => {
-    const { x: x0, y: y0 } = startPoint();
-    const { x: x1, y: y1 } = endPoint();
+    const start = startPoint();
+    const end  = endPoint();
 
-    return getArrow(x0, y0, x1, y1, {
+    if (!start || !end) return;
+
+    return getArrow(start.x, start.y, end.x, end.y, {
       stretch: 0.25,
       stretchMax: Infinity,
       padEnd: 12 / (props.viewportScale || 1) 
@@ -49,16 +51,6 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
   });
 
   const scale = createMemo(() => 1 / (props.viewportScale || 1));
-
-  const endAngleAsDegrees = createMemo(() => {
-    const [, , , , , , ae] = arrowData();
-    return ae * (180 / Math.PI);
-  });
-
-  const d = createMemo(() => {
-    const [sx, sy, cx, cy, ex, ey] = arrowData();
-    return `M${sx},${sy} Q${cx},${cy} ${ex},${ey}`;
-  });
 
   const onGrab = (handle: string) => (evt: PointerEvent) => {
     grabbedHandle = handle;
@@ -119,36 +111,45 @@ export const ArrowEditor = (props: ArrowEditorProps) => {
   }
 
   return (
-    <g 
-      class="a9s-arrow a9s-arrow-editor"
-      onPointerUp={onRelease} 
-      onPointerMove={onPointerMove}>
-      <path 
-        class="a9s-arrow-buffer" 
-        d={d()} 
-        onPointerDown={onGrab('arrow')} />
+    <Show when={arrowData()}>
+      {data => {
+        const [sx, sy, cx, cy, ex, ey, angle] = data();
+        const d = `M${sx},${sy} Q${cx},${cy} ${ex},${ey}`;
 
-      <path 
-        class="a9s-arrow-outer" 
-        d={d()} />
+        return (
+          <g
+            class="a9s-arrow a9s-arrow-editor"
+            onPointerUp={onRelease}
+            onPointerMove={onPointerMove}>
+            <path
+              class="a9s-arrow-buffer"
+              d={d}
+              onPointerDown={onGrab('arrow')} />
 
-      <circle 
-        class="a9s-arrow-base"
-        cx={arrowData()[0]} 
-        cy={arrowData()[1]} 
-        r={4 * scale()}
-        onPointerDown={onGrab('start')} />
+            <path
+              class="a9s-arrow-outer"
+              d={d} />
 
-      <polygon
-        class="a9s-arrow-head"
-        points="0,-6 12,0, 0,6"
-        transform={`translate(${arrowData()[4]},${arrowData()[5]}) rotate(${endAngleAsDegrees()}) scale(${scale()})`} 
-        onPointerDown={onGrab('end')} />
+            <circle
+              class="a9s-arrow-base"
+              cx={sx}
+              cy={sy}
+              r={4 * scale()}
+              onPointerDown={onGrab('start')} />
 
-      <path
-        class="a9s-arrow-inner"
-        d={d()} />
-    </g>
+            <polygon
+              class="a9s-arrow-head"
+              points="0,-6 12,0, 0,6"
+              transform={`translate(${ex},${ey}) rotate(${angle * (180 / Math.PI)}) scale(${scale()})`}
+              onPointerDown={onGrab('end')} />
+
+            <path
+              class="a9s-arrow-inner"
+              d={d} />
+          </g>
+        );
+      }}
+    </Show>
   )
 
 }

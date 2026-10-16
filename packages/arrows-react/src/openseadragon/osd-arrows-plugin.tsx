@@ -35,11 +35,11 @@ export const OSDArrowsPlugin = (props: OSDArrowsPluginProps) => {
   }, [anno, viewer]);
 
   useEffect(() => {
-    instance?.setEnabled(props.enabled);
+    instance?.setEnabled(Boolean(props.enabled));
   }, [instance, props.enabled]);
 
   useEffect(() => {
-    instance?.setMode(props.mode);
+    instance?.setMode(props.mode || 'select');
   }, [instance, props.mode]);
 
   useEffect(() => {

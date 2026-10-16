@@ -1,7 +1,7 @@
 import { createSignal, onCleanup, onMount, Show } from 'solid-js';
 import { v4 as uuidv4 } from 'uuid';
 import type { ImageAnnotation } from '@annotorious/annotorious';
-import { ArrowAnnotation, ArrowAnchor, Point, AnnotatorInstanceState } from '@/types';
+import type { ArrowAnnotation, ArrowAnchor, Point, AnnotatorInstanceState } from '@/types';
 import { round } from '@/utils';
 import { SvgArrow } from '@/components/arrows-layer/svg-arrow';
 import { SvgEmphasis } from './svg-emphasis';
@@ -24,6 +24,12 @@ interface ArrowToolProps {
 
 const DRAG_TIME_THRESHOLD = 250;
 
+const isPointerLikeEvent = (evt: Event): evt is Event & { offsetX: number; offsetY: number } =>
+  'offsetX' in evt &&
+  typeof evt.offsetX === 'number' &&
+  'offsetY' in evt &&
+  typeof evt.offsetY === 'number';
+
 export const ArrowTool = (props: ArrowToolProps) => {
 
   const [start, setStart] = createSignal<Point | null>(null);
@@ -36,7 +42,10 @@ export const ArrowTool = (props: ArrowToolProps) => {
   
   const createArrow = (start: Point, end: Point): ArrowAnnotation => {
 
-    const getAnchor = (pt: Point, annotation?: ImageAnnotation): Point | ArrowAnchor => {
+    const getAnchor = (
+      pt: Point,
+      annotation?: ImageAnnotation | null
+    ): Point | ArrowAnchor => {
       if (!annotation) return ({
         x: round(pt.x),
         y: round(pt.y)
@@ -72,13 +81,15 @@ export const ArrowTool = (props: ArrowToolProps) => {
     }
   }
 
-  const onPointerDown = (evt: PointerEvent) => {
+  const onPointerDown = (evt: Event) => {
+    if (!isPointerLikeEvent(evt)) return;
+
     const pt = props.transform({ x: evt.offsetX, y: evt.offsetY });
 
     const s = start();
     if (!s) {
       setStart(pt);
-      setStartAnnotation(props.hovered);
+      setStartAnnotation(props.hovered ?? null);
       setCursor(pt);
 
       lastPointerDown = Date.now(); 
@@ -93,13 +104,17 @@ export const ArrowTool = (props: ArrowToolProps) => {
     }
   }
 
-  const onPointerMove = (evt: PointerEvent) => {
+  const onPointerMove = (evt: Event) => {
+    if (!isPointerLikeEvent(evt)) return;
+
     if (!start()) return;
     const pt = props.transform({ x: evt.offsetX, y: evt.offsetY });
     setCursor(pt);
   }
 
-  const onPointerUp = (evt: PointerEvent) => {
+  const onPointerUp = (evt: Event) => {
+    if (!isPointerLikeEvent(evt)) return;
+
     const s = start();
 
     if (!s || lastPointerDown === null) return;
@@ -132,18 +147,26 @@ export const ArrowTool = (props: ArrowToolProps) => {
   return (
     <g class="a9s-arrow a9s-arrow-tool">
       <Show when={props.hovered}>
-        <SvgEmphasis 
-          annotation={props.hovered} 
-          style="start" />
+        {annotation => (
+          <SvgEmphasis
+            annotation={annotation()}
+            style="start" />
+        )}
       </Show>
       
-      {start() && cursor() && (
-        <SvgArrow 
-          state={props.state}
-          start={start()} 
-          end={cursor()} 
-          viewportScale={props.viewportScale} />
-      )}
+      <Show when={start()}>
+        {startPoint => (
+          <Show when={cursor()}>
+            {cursorPoint => (
+              <SvgArrow
+                state={props.state}
+                start={startPoint()}
+                end={cursorPoint()}
+                viewportScale={props.viewportScale} />
+            )}
+          </Show>
+        )}
+      </Show>
     </g>
   )
 

@@ -1,8 +1,9 @@
 import { createSignal, onCleanup, onMount } from 'solid-js';
-import { Selection, SelectionState } from '@annotorious/annotorious';
-import { AnnotatorInstanceAnnotation } from '@/types';
+import type { Annotation, Selection, SelectionState } from '@annotorious/annotorious';
 
-export const useSelection = (selection: SelectionState<AnnotatorInstanceAnnotation, AnnotatorInstanceAnnotation>) => {
+export const useSelection = <I extends Annotation, E extends unknown>(
+  selection: SelectionState<I, E>
+) => {
 
   const [selected, setSelected] = createSignal<Selection>({ selected: selection.selected });
 

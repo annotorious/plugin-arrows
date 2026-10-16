@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import OpenSeadragon from 'openseadragon';
-import { Store, useAnnotationStore, useSelection } from '@annotorious/react';
+import { useAnnotationStore, useSelection } from '@annotorious/react';
+import type { Store } from '@annotorious/react';
 import { getArrowMidpoint, isArrowAnnotation } from '@annotorious/plugin-arrows';
 import type { AnnotatorInstanceAnnotation, ArrowAnnotation, Point } from '@annotorious/plugin-arrows';
 
@@ -31,12 +32,16 @@ export const useArrowSelection = (viewer?: OpenSeadragon.Viewer) => {
     if (selectedArrows.length > 0) {
       const { editable } = selectedArrows[0];
       const arrow = selectedArrows[0].annotation as ArrowAnnotation;
-      const midpoint = getArrowMidpoint(store, arrow, scale);
+
+      const midpoint = store
+        ? getArrowMidpoint(store, arrow, scale) ?? undefined
+        : undefined;
+        
       return { arrow, editable, midpoint, event };
     } else {
       return {};
     }
-  }, [selection, scale]);
+  }, [selection, scale, store]);
 
   useEffect(() => {
     if (!viewer) return;

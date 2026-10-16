@@ -127,7 +127,11 @@ export const ArrowsLayer = (props: ArrowsLayerProps) => {
   }
 
   const onPointerMove = (evt: PointerEvent) => {
+    if (!svgRef) return;
+
     const pt = props.elementToImage(svgRef)({ x: evt.offsetX, y: evt.offsetY });
+    if (!pt) return;
+
     const hovered = store.getAt(pt.x, pt.y);
 
     if (!isArrowAnnotation(hovered))

@@ -8,6 +8,9 @@
     "moduleResolution": "bundler",
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "types": ["vite/client"],
     "paths": {
       "@/*": ["./src/*"]
