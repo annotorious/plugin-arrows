@@ -1,7 +1,7 @@
 import { createMemo, Show } from 'solid-js';
 import { getArrow } from 'perfect-arrows';
 import { clsx } from 'clsx';
-import { Point } from 'dist/types';
+import { Point } from '@/types';
 import { AnnotatorInstanceState, ArrowAnchor } from '@/types';
 import { useAnchorPoint } from '@/hooks/use-anchor-point';
 
