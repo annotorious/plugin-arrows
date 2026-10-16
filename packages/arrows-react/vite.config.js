@@ -29,8 +29,8 @@ export default defineConfig({
         'openseadragon',
         '@annotorious/react',
         'openseadragon',
-        'react',
-        'react-dom'
+        /^react\//,        // react/jsx-runtime, react/jsx-dev-runtime
+        /^react-dom\//,    // react-dom/client, etc.
       ],
       output: {
         assetFileNames: 'annotorious-arrows.[ext]'
