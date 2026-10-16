@@ -30,18 +30,17 @@
     "./annotorious-arrows.css": "./dist/annotorious-arrows.css"
   },
   "devDependencies": {
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "@vitejs/plugin-react": "^5.0.4",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "typescript": "5.9.3",
-    "vite": "^6.4.1",
-    "vite-plugin-dts": "^4.5.4",
-    "vite-tsconfig-paths": "^5.1.4"
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "7.0.2",
+    "vite": "^8.3.4",
+    "vite-plugin-dts": "^5.1.2"
   },
   "peerDependencies": {
-    "@annotorious/react": "^3.7.12",
+    "@annotorious/react": "^3.9.4",
     "openseadragon": ">= ^4.x || >= ^5.x || >= ^6.x",
     "react": ">= ^18.x || >= ^19.x",
     "react-dom": ">= ^18.x || >= ^19.x"
@@ -53,8 +52,8 @@
   },
   "dependencies": {
     "@annotorious/plugin-arrows": "0.3.0",
-    "@floating-ui/react": "^0.27.16",
-    "uuid": "^13.0.0"
+    "@floating-ui/react": "^0.27.20",
+    "uuid": "^14.0.3"
   },
   "sideEffects": false
 }

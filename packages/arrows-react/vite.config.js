@@ -1,12 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import tsConfigPaths from 'vite-tsconfig-paths';
 import dts from 'vite-plugin-dts';
 
 export default defineConfig({
   plugins: [
     react(),
-    tsConfigPaths(),
     dts({
       include: ['./src/'],
       entryRoot: './src'
@@ -14,6 +12,9 @@ export default defineConfig({
   ],
   server: {
     open: '/test/index.html'
+  },
+  resolve: {
+    tsconfigPaths: true 
   },
   build: {
     lib: {

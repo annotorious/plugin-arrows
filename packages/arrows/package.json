@@ -34,17 +34,18 @@
   },
   "devDependencies": {
     "@annotorious/plugin-broadcast-channel-sync": " ^0.0.3",
-    "@types/openseadragon": "^4.1.0",
+    "@types/openseadragon": "^6.0.0",
+    "@typescript/typescript6": "^6.0.2",
     "dequal": "^2.0.3",
-    "typescript": "5.9.3",
-    "vite": "^6.4.1",
-    "vite-plugin-dts": "^4.5.4",
-    "vite-plugin-solid": "^2.11.9",
-    "vitest": "^3.2.4"
+    "typescript": "7.0.2",
+    "vite": "^8.3.4",
+    "vite-plugin-dts": "^5.1.2",
+    "vite-plugin-solid": "^2.11.14",
+    "vitest": "^5.0.5"
   },
   "peerDependencies": {
-    "@annotorious/annotorious": "^3.7.12",
-    "@annotorious/openseadragon": "^3.7.12",
+    "@annotorious/annotorious": "^3.9.4",
+    "@annotorious/openseadragon": "^3.9.4",
     "openseadragon": ">= ^4.x || >= ^5.x || >= ^6.x"
   },
   "peerDependenciesMeta": {
@@ -55,10 +56,10 @@
   "dependencies": {
     "@nanostores/solid": "^1.1.1",
     "clsx": "^2.1.1",
-    "nanoevents": "^9.1.0",
-    "nanostores": "^1.0.1",
+    "nanoevents": "^10.0.0",
+    "nanostores": "^1.5.5",
     "perfect-arrows": "^0.3.7",
-    "solid-js": "^1.9.9",
-    "uuid": "^13.0.0"
+    "solid-js": "^1.9.17",
+    "uuid": "^14.0.3"
   }
 }
