@@ -46,6 +46,7 @@ export const mountOSDPlugin = (
 
       dispose = render(() => (
         <OpenSeadragonArrowsLayer 
+          getUser={anno.getUser}
           options={options}
           state={state}
           viewer={viewer} 
