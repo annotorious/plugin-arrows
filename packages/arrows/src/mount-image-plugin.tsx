@@ -1,5 +1,3 @@
-import type { ImageAnnotation, ImageAnnotator } from '@annotorious/annotorious';
-import { render } from 'solid-js/web';
 import type { Filter, ImageAnnotation, ImageAnnotator } from '@annotorious/annotorious';
 import { ImageArrowsLayer, ArrowsLayerAPI } from '@/components';
 import { createConnectionGraph, createHoverStateBridge } from '@/state';
