@@ -1,10 +1,10 @@
 import { type ReactNode, useEffect, useRef, useState } from 'react';
 import OpenSeadragon from 'openseadragon';
 import type { FloatingArrowProps } from '@floating-ui/react';
-import { useAnnotator, useViewer } from '@annotorious/react';
-import type { AnnotoriousOpenSeadragonAnnotator } from '@annotorious/react';
+import { useViewer } from '@annotorious/react';
 import type { ArrowPopupProps } from '../arrow-popup-props';
 import { useArrowSelection, usePopupCallbacks } from '../hooks';
+import type { ArrowAnnotation } from '@annotorious/plugin-arrows';
 import {
   useFloating,
   arrow as popupArrowMarker,
@@ -26,9 +26,26 @@ interface OSDArrowPopupProps {
 
 }
 
-export const OSDArrowPopup = (props: OSDArrowPopupProps) => {
+interface ArrowPopupContentProps {
 
-  const anno = useAnnotator<AnnotoriousOpenSeadragonAnnotator>();
+  arrow: ArrowAnnotation;
+
+  popup(props: ArrowPopupProps): ReactNode;
+
+}
+
+const ArrowPopupContent = (props: ArrowPopupContentProps) => {
+  const { onCreateBody, onDeleteBody, onUpdateBody } = usePopupCallbacks(props.arrow);
+
+  return props.popup({
+    annotation: props.arrow,
+    onCreateBody,
+    onDeleteBody,
+    onUpdateBody
+  });
+}
+
+export const OSDArrowPopup = (props: OSDArrowPopupProps) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -37,8 +54,6 @@ export const OSDArrowPopup = (props: OSDArrowPopupProps) => {
   const arrowRef = useRef(null);
 
   const { arrow, midpoint } = useArrowSelection(viewer);
-
-  const { onCreateBody, onDeleteBody, onUpdateBody } = usePopupCallbacks(arrow);
 
   const { refs, floatingStyles, context } = useFloating({
     open: isOpen,
@@ -61,7 +76,7 @@ export const OSDArrowPopup = (props: OSDArrowPopupProps) => {
   });
 
   useEffect(() => {
-    if (!arrow) { 
+    if (!arrow || !midpoint || !viewer) {
       setIsOpen(false);
       return;
     }
@@ -105,9 +120,9 @@ export const OSDArrowPopup = (props: OSDArrowPopupProps) => {
       window.removeEventListener('resize', setPosition);
       viewer.removeHandler('update-viewport', setPosition);
     };
-  }, [anno, viewer, arrow, midpoint]);
+  }, [viewer, arrow, midpoint]);
 
-  return isOpen && arrow && (
+  return isOpen && arrow && midpoint && (
     <div 
       className="a9s-wire-popup a9s-openseadragon-wire-popup"
       ref={refs.setFloating}
@@ -120,12 +135,7 @@ export const OSDArrowPopup = (props: OSDArrowPopupProps) => {
           {...(props.arrowProps || {})} />
       )}
 
-      {props.popup({
-        annotation: arrow,
-        onCreateBody,
-        onDeleteBody,
-        onUpdateBody
-      })}
+      <ArrowPopupContent arrow={arrow} popup={props.popup} />
     </div>
   )
 

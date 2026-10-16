@@ -20,8 +20,6 @@ export const mountOSDPlugin = (
   options: ArrowsPluginOptions = {}
 ): ArrowsPluginInstance => {
 
-  console.log(anno);
-
   const state = anno.state as AnnotatorInstanceState;
 
   // Needed to keep arrows in sync if connected annotations 

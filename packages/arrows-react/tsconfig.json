@@ -2,7 +2,6 @@
   "compilerOptions": {
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
     "composite": true,
     "declaration": true,
     "declarationDir": "types",
@@ -15,12 +14,14 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "noEmit": true,
+    "noUncheckedSideEffectImports": true,
     "outDir": "dist",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "sourceMap": true,
     "target": "ESNext",
+    "types": ["vite/client"],
     "useDefineForClassFields": true
   }
 }
